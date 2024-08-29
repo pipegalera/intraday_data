@@ -10,7 +10,7 @@ This repository automatically collects and stores 1Min intraday data of the S&P5
 
 ## Why >
 
-I couldn't find any easy, accesible, and free platform that provided intraday stock data.
+I couldn't find any easy, accesible, and free platform that provided intraday stock data files.
 
 I figured that more people would have the same problem - e.g. see the [multiple reddit posts about intraday data](https://www.google.com/search?q=intraday+data+free+site%3Awww.reddit.com).
 
