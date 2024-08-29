@@ -32,47 +32,52 @@ def delete_parquet_file(service, file_path, folder_id=FOLDER_ID):
         service.files().delete(fileId=file.get('id')).execute()
         print(f"Deleted existing file: {file.get('name')} (ID: {file.get('id')})")
 
-def upload_parquet_file(service, file_path, folder_id=FOLDER_ID, max_retries=3, retry_delay=5):
-    file_name = os.path.basename(file_path)
-    file_metadata = {
-        'name': file_name,
-        'parents': [folder_id]
-    }
-    media = MediaFileUpload(file_path, resumable=True, mimetype='application/octet-stream')
+def upload_parquet_files(service, directory=DATA_PATH + "parquet_files", folder_id=FOLDER_ID, max_retries=3, retry_delay=5):
+    for file_name in os.listdir(directory):
+        if file_name.endswith(".parquet"):
+            file_path = os.path.join(directory, file_name)
+            file_metadata = {
+                'name': file_name,
+                'parents': [folder_id]
+            }
+            media = MediaFileUpload(file_path, resumable=True, mimetype='application/octet-stream')
 
-    for attempt in range(max_retries):
-        try:
-            file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-            print(f"Created new file: {file_name} (ID: {file.get('id')})")
-            return
-        except (socket.timeout, HttpError) as e:
-            if attempt == max_retries - 1:
-                print(f"Failed to upload {file_name} after {max_retries} attempts: {str(e)}")
-                raise
-            else:
-                print(f"Attempt {attempt + 1} failed. Retrying in {retry_delay} seconds...")
-                time.sleep(retry_delay)
+            # Check if file already exists
+            query = f"name='{file_name}' and '{folder_id}' in parents"
+            results = service.files().list(q=query, fields="files(id, name)").execute()
+            files = results.get('files', [])
+
+            for attempt in range(max_retries):
+                try:
+                    if files:
+                        # If file exists, update it
+                        file_id = files[0]['id']
+                        file = service.files().update(fileId=file_id, media_body=media).execute()
+                        print(f"Updated existing file: {file_name} (ID: {file.get('id')})")
+                    else:
+                        # If file doesn't exist, create it
+                        file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+                        print(f"Created new file: {file_name} (ID: {file.get('id')})")
+                    break
+                except (socket.timeout, HttpError) as e:
+                    if attempt == max_retries - 1:
+                        print(f"Failed to upload {file_name} after {max_retries} attempts: {str(e)}")
+                    else:
+                        print(f"Attempt {attempt + 1} failed. Retrying in {retry_delay} seconds...")
+                        time.sleep(retry_delay)
 
 def main():
     service = get_drive_service()
 
     start_time = time.time()
     """
-    for symbol in spy_symbols:
-        file_path = DATA_PATH + f"parquet_files/{symbol}.parquet"
-        print(f"Updating: {symbol}...")
-        delete_parquet_file(service,
-                            file_path,
-                            folder_id)
-        upload_parquet_file(service,
-                            file_path,
-                            folder_id)
-    """
     file_path = DATA_PATH + f"parquet_files/spy_intraday_1M.parquet"
     delete_parquet_file(service,
                         file_path)
     upload_parquet_file(service,
                         file_path)
+    """
+    upload_parquet_files(service)
     end_time = time.time()
     execution_time = round(end_time - start_time,2)
     print(f"Execution time: {execution_time} seconds")
