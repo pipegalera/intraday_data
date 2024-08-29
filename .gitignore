@@ -1,0 +1,6 @@
+**/[Tt]est*
+__pycache__
+.ipynb_checkpoints
+.env
+*.parquet
+google_service_account.json

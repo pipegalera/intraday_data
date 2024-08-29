@@ -1,0 +1,14 @@
+name: intraday_data
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python
+  - pandas
+  - python-dotenv
+  - alpaca-py
+  - pytz
+  - duckdb
+  - google-auth
+  - google-auth-oauthlib
+  - google-api-python-client
