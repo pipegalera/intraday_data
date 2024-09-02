@@ -32,6 +32,7 @@ def delete_parquet_file(service, file_path, folder_id=FOLDER_ID):
         service.files().delete(fileId=file.get('id')).execute()
         print(f"Deleted existing file: {file.get('name')} (ID: {file.get('id')})")
 
+
 def upload_parquet_files(service, directory=DATA_PATH + "parquet_files", folder_id=FOLDER_ID, max_retries=3, retry_delay=5):
     for file_name in os.listdir(directory):
         if file_name.endswith(".parquet"):
