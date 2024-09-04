@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com/"
+            crossorigin=""
+        />
+        <link
+            rel="stylesheet"
+            as="style"
+            onload="this.rel='stylesheet'"
+            href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Work+Sans%3Awght%40400%3B500%3B700%3B900"
+        />
+
+        <title>EasyFinData.com</title>
+        <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    </head>
+
+    <body>
+        <div
+            class="relative flex size-full min-h-screen flex-col bg-[#181411] dark justify-between group/design-root overflow-x-hidden items-center"
+            style="
+                font-family: &quot;Work Sans&quot;, &quot;Noto Sans&quot;,
+                    sans-serif;
+            "
+        >
+            <!-- Header content -->
+            <div
+                class="text-[36px] font-bold leading-tight tracking-[-0.015em] px-4 py-3 bg-gradient-to-r from-gray-300 via-yellow-200 to-orange-500 w-full text-left max-w-2xl"
+                style="
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    color: transparent;
+                "
+            >
+                EasyFinData.com
+            </div>
+            <!-- Description -->
+            <div class="px-4 py-3 w-full max-w-2xl">
+                <p
+                    class="text-[#baab9c] text-base font-normal leading-normal mb-4"
+                >
+                    Updated S&P500 intraday data (1 Min) from
+                    2016 on.
+                <br class="py-1">
+                Free and
+                    <a
+                        href="https://github.com/pipegalera/intraday_data"
+                        style="text-decoration: underline"
+                        > open source.</a
+                </p>
+            </div>
+            <!-- Search form -->
+            <form action="/" method="GET" class="px-4 py-1 w-full max-w-2xl">
+                <label class="flex flex-col min-w-40 h-12 w-full">
+                    <div
+                        class="flex w-full flex-1 items-stretch rounded-xl h-full"
+                    >
+                        <div
+                            class="text-[#baab9c] flex border-none bg-[#393028] items-center justify-center pl-4 rounded-l-xl border-r-0"
+                            data-icon="MagnifyingGlass"
+                            data-size="24px"
+                            data-weight="regular"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24px"
+                                height="24px"
+                                fill="currentColor"
+                                viewBox="0 0 256 256"
+                            >
+                                <path
+                                    d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <input
+                            name="search"
+                            type="text"
+                            placeholder="Search symbol and press enter..."
+                            value="{{ search_query }}"
+                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#393028] focus:border-none h-full placeholder:text-[#baab9c] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                        />
+                    </div>
+                </label>
+            </form>
+
+            <!-- Ticker list -->
+            {% for ticker in tickers %}
+            <div
+                class="flex items-center gap-4 bg-[#181411] px-4 min-h-[72px] py-2 justify-between w-full max-w-2xl"
+            >
+                <div class="flex flex-col justify-center flex-grow">
+                    <p
+                        class="text-white text-base font-medium leading-normal line-clamp-1"
+                    >
+                        {{ ticker.ticker }}
+                    </p>
+                    <p
+                        class="text-[#baab9c] text-sm font-normal leading-normal line-clamp-2"
+                    >
+                        Updated {{ ticker.hours_ago }} hours, {{
+                        ticker.minutes_ago }} minutes ago
+                    </p>
+                </div>
+                <div
+                    class="text-[#baab9c] text-sm font-normal leading-normal mr-4"
+                >
+                    {{ ticker.file_size }}
+                </div>
+                <div class="shrink-0">
+                    <a
+                        href="{{ url_for('download_file', ticker=ticker.ticker) }}"
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#393028] text-white text-sm font-medium leading-normal w-fit no-underline"
+                    >
+                        <span class="truncate">Download</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Display dots and total count if there are more results -->
+            {% if has_more %}
+            <div class="flex items-center gap-4 bg-[#181411] px-4 min-h-[72px] py-2 justify-center w-full max-w-2xl">
+                <p class="text-[#baab9c] text-base font-normal leading-normal">
+                    ... (503 symbols in total)
+                </p>
+            </div>
+            {% endif %}
+            <!-- Footer -->
+            <div class="w-full bg-[#181411]">
+                <footer
+                    class="flex flex-col gap-6 px-5 py-10 text-center @container"
+                >
+                    <p
+                        class="text-[#baab9c] text-base font-normal leading-normal"
+                    >
+                        Copyright 2024 EasyFinData.com
+                    </p>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
