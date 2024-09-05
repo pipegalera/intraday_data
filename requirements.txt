@@ -1,4 +1,3 @@
-python
 pandas
 python-dotenv
 alpaca-py
