@@ -4,7 +4,6 @@ from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from utils import remove_duplicates_sql, get_symbols_SPY
 from pytz import timezone
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
@@ -19,6 +18,11 @@ os.chdir(HOME_PATH)
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute) # Intraday 1Min data
 start_date="2016-01-01" # Alpaca markets API doesn't go further in time
+
+def get_symbols_SPY():
+    url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+    df = pd.read_html(url)[0]
+    return dict(zip(df["Symbol"], df["Security"]))
 
 def get_stock_data(symbols,
                  timeframe=timeframe,
@@ -37,20 +41,20 @@ def get_stock_data(symbols,
 
     return df
 
-def save_stock_data(df, db_name):
+def save_stock_data(df):
     symbols = " ".join(df.reset_index()["symbol"].unique())
-    df.to_parquet(DATA_PATH + f"parquet_files/{symbols}.parquet", index=False)
+    df.to_csv(DATA_PATH + f"/{symbols}.csv", index=False)
     print(f"--> {symbols} symbol saved in: {DATA_PATH}")
     print(f"--> Timeframe: {start_date} - Latest available")
 
 def main():
     # Get all S&P500 symbols
-    symbols_SPY = get_symbols_SPY()
+    symbols_SPY = sorted(get_symbols_SPY().keys())
 
     # Check what symbols are already downloaded
     current_symbols = []
-    for filename in os.listdir(DATA_PATH + 'parquet_files/'):
-        if os.path.isfile(DATA_PATH + 'parquet_files/' + filename):
+    for filename in os.listdir(DATA_PATH):
+        if os.path.isfile(DATA_PATH + '/' + filename):
             symbol_name = os.path.splitext(filename)[0]
             current_symbols.append(symbol_name)
 
@@ -60,18 +64,19 @@ def main():
     symbols = list(set(symbols_SPY) - set(current_symbols))
     for symbol in symbols:
         df = get_stock_data(symbol)
-        save_stock_data(df, "Stocks")
+        save_stock_data(df)
 
-    # If there is no symbols left to be downloaded, stack them in a db
+    # If there is no symbols left to be downloaded, stack them in a single file
+    consolidated_file_name = '503 S&P Symbols - All data'
     if len(symbols) == 0:
-        print("All symbols are already downloaded. Creating a unique parquet file with all the symbols...")
+        print("All symbols are already downloaded. Creating a unique CSV file with all the symbols...")
         duckdb.query('''
-            COPY (SELECT * FROM read_parquet('{0}parquet_files/*.parquet'))
-            TO '{0}spy_intraday_1M.parquet'
-            (FORMAT 'parquet')
-        '''.format(DATA_PATH))
+            COPY (SELECT * FROM read_csv('{0}/*.CSV'))
+            TO '{0}/{1} - All data.CSV'
+            (FORMAT 'CSV')
+        '''.format(DATA_PATH, consolidated_file_name))
 
-        print(f"--> All SPY symbols saved as: {DATA_PATH}spy_intraday_1M.parquet")
+        print(f"--> All SPY symbols saved as: {DATA_PATH}/{consolidated_file_name}.CSV")
 
 if __name__== "__main__":
     main()
