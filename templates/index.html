@@ -20,7 +20,7 @@
 
     <body>
         <div
-            class="relative flex size-full min-h-screen flex-col bg-[#181411] dark justify-between group/design-root overflow-x-hidden items-center"
+            class="relative flex size-full min-h-screen flex-col bg-gradient-to-b from-blue-100 via-[#F5F5F5] to-[#F5F5F5] dark justify-between group/design-root overflow-x-hidden items-center"
             style="
                 font-family: &quot;Work Sans&quot;, &quot;Noto Sans&quot;,
                     sans-serif;
@@ -28,38 +28,33 @@
         >
             <!-- Header content -->
             <div
-                class="text-[36px] font-bold leading-tight tracking-[-0.015em] px-4 py-3 bg-gradient-to-r from-gray-300 via-yellow-200 to-orange-500 w-full text-left max-w-2xl"
-                style="
-                    background-clip: text;
-                    -webkit-background-clip: text;
-                    color: transparent;
-                "
+                class="text-[36px] font-bold leading-tight tracking-[-0.015em] px-4 py-4 w-full text-left max-w-2xl bg-gradient-to-r from-sky-500 via-blue-500 to-blue-600 text-transparent bg-clip-text"
             >
                 EasyFinData.com
             </div>
             <!-- Description -->
-            <div class="px-4 py-3 w-full max-w-2xl">
+            <div class="px-4 py-4 w-full max-w-2xl">
                 <p
-                    class="text-[#baab9c] text-base font-normal leading-normal mb-4"
+                    class="text-[#333333] text-base font-medium leading-normal"
                 >
-                    Updated S&P500 intraday data (1 Min) from
+                    1 Minute S&P500 intraday data from
                     2016 on.
-                <br class="py-1">
-                Free and
+                <br class="py-0">
+                Daily updated, free and
                     <a
                         href="https://github.com/pipegalera/intraday_data"
-                        style="text-decoration: underline"
+                        style="text-decoration: underline; color: #007BFF;"
                         > open source.</a
                 </p>
             </div>
             <!-- Search form -->
-            <form action="/" method="GET" class="px-4 py-1 w-full max-w-2xl">
+            <form action="/" method="GET" class="px-4 py-4 w-full max-w-2xl">
                 <label class="flex flex-col min-w-40 h-12 w-full">
                     <div
                         class="flex w-full flex-1 items-stretch rounded-xl h-full"
                     >
                         <div
-                            class="text-[#baab9c] flex border-none bg-[#393028] items-center justify-center pl-4 rounded-l-xl border-r-0"
+                            class="text-[#333333] flex border-none bg-[#FFFFFF] items-center justify-center pl-4 rounded-l-xl border-r-0"
                             data-icon="MagnifyingGlass"
                             data-size="24px"
                             data-weight="regular"
@@ -81,7 +76,7 @@
                             type="text"
                             placeholder="Search symbol and press enter..."
                             value="{{ search_query }}"
-                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#393028] focus:border-none h-full placeholder:text-[#baab9c] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333333] focus:outline-0 focus:ring-0 border-none bg-[#FFFFFF] focus:border-none h-full placeholder:text-[#999999] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
                         />
                     </div>
                 </label>
@@ -90,30 +85,30 @@
             <!-- Ticker list -->
             {% for ticker in tickers %}
             <div
-                class="flex items-center gap-4 bg-[#181411] px-4 min-h-[72px] py-2 justify-between w-full max-w-2xl"
+                class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between w-full max-w-2xl"
             >
                 <div class="flex flex-col justify-center flex-grow">
                     <p
-                        class="text-white text-base font-medium leading-normal line-clamp-1"
+                        class="text-[#333333] text-base font-medium leading-normal line-clamp-1"
                     >
                         {{ ticker.ticker }}
                     </p>
                     <p
-                        class="text-[#baab9c] text-sm font-normal leading-normal line-clamp-2"
+                        class="text-[#666666] text-sm font-normal leading-normal line-clamp-2"
                     >
                         Updated {{ ticker.hours_ago }} hours, {{
                         ticker.minutes_ago }} minutes ago
                     </p>
                 </div>
                 <div
-                    class="text-[#baab9c] text-sm font-normal leading-normal mr-4"
+                    class="text-[#666666] text-sm font-normal leading-normal mr-4"
                 >
                     {{ ticker.file_size }}
                 </div>
                 <div class="shrink-0">
                     <a
                         href="{{ url_for('download_file', ticker=ticker.ticker) }}"
-                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#393028] text-white text-sm font-medium leading-normal w-fit no-underline"
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#007BFF] text-white text-sm font-medium leading-normal w-fit no-underline"
                     >
                         <span class="truncate">Download</span>
                     </a>
@@ -123,19 +118,20 @@
 
             <!-- Display dots and total count if there are more results -->
             {% if has_more %}
-            <div class="flex items-center gap-4 bg-[#181411] px-4 min-h-[72px] py-2 justify-center w-full max-w-2xl">
-                <p class="text-[#baab9c] text-base font-normal leading-normal">
+            <div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-center w-full max-w-2xl pb-4">
+                <p class="text-[#666666] text-base font-normal leading-normal">
                     ... (503 symbols in total)
                 </p>
             </div>
             {% endif %}
             <!-- Footer -->
-            <div class="w-full bg-[#181411]">
+            <div class="w-full bg-[#F5F5F5]">
+                <hr class="border-t border-[#CCCCCC] mb-4">
                 <footer
                     class="flex flex-col gap-6 px-5 py-10 text-center @container"
                 >
                     <p
-                        class="text-[#baab9c] text-base font-normal leading-normal"
+                        class="text-[#666666] text-base font-normal leading-normal"
                     >
                         Copyright 2024 EasyFinData.com
                     </p>
