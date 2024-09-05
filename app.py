@@ -15,7 +15,8 @@ def get_file_size(file_path):
 
 def get_tickers(search_query=None):
     data_dir = './data'
-    files = [f for f in os.listdir(data_dir) if f.endswith('.parquet')]
+    files = [f for f in os.listdir(data_dir) if f.endswith('.csv')]
+    files.append("503 S&P Symbols - All data.CSV")
     tickers = []
     for file in files:
         file_path = os.path.join(data_dir, file)
@@ -26,6 +27,7 @@ def get_tickers(search_query=None):
 
         parts = os.path.splitext(file)[0].split('_')
         ticker = parts[0]
+
 
         if search_query is None or search_query.lower() in ticker.lower():
             tickers.append({
@@ -54,7 +56,7 @@ def index():
 
 @app.route('/download/<ticker>')
 def download_file(ticker):
-    file_path = os.path.join('./data', f'{ticker}.parquet')
+    file_path = os.path.join('./data', f'{ticker}.csv')
     if os.path.exists(file_path):
         return send_file(file_path, as_attachment=True)
     else:
