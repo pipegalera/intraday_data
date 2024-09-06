@@ -4,6 +4,7 @@ __pycache__
 .env
 *.parquet
 *.csv
+*.CSV
 google_service_account.json
 restos/**
 *.tmp

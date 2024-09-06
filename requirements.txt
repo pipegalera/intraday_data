@@ -5,3 +5,4 @@ pytz
 duckdb
 flask
 gunicorn
+lxml

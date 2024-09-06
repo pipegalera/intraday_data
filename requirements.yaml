@@ -11,3 +11,4 @@ dependencies:
   - duckdb
   - flask
   - gunicorn
+  - lxml
