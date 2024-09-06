@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, send_file
+from flask import Flask, render_template, jsonify, request, send_file, Response
 import os
 from datetime import datetime
 
@@ -12,6 +12,7 @@ def get_file_size(file_path):
     else:
         size_mb = round(size_bytes / (1024 * 1024), 2)
         return f"{size_mb} MB"
+
 
 def get_tickers(search_query=None):
     data_dir = './data'
@@ -58,7 +59,16 @@ def index():
 def download_file(ticker):
     file_path = os.path.join('./data', f'{ticker}.csv')
     if os.path.exists(file_path):
-        return send_file(file_path, as_attachment=True)
+        def generate():
+            with open(ticker, 'rb') as f:
+                while True:
+                    chunk = f.read(4096)
+                    if not chunk:
+                        break
+                    yield chunk
+
+        return Response(generate(), mimetype='text/csv',
+                        headers={"Content-Disposition": f"attachment; filename={ticker}"})
     else:
         return "File not found", 404
 

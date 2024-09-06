@@ -15,7 +15,7 @@ ALPACA_SECRET = os.getenv("ALPACA_SECRET")
 DATA_PATH = os.getenv("DATA_PATH")
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute)
-start_date = datetime.now(timezone('US/Eastern')) - timedelta(hours=15)
+start_date = datetime.now(timezone('US/Eastern')) - timedelta(hours=5)
 
 def get_updated_stock_data(symbols):
     data_client = StockHistoricalDataClient(ALPACA_KEY, ALPACA_SECRET)
