@@ -72,7 +72,7 @@ def main():
         print("All symbols are already downloaded. Creating a unique CSV file with all the symbols...")
         duckdb.query('''
             COPY (SELECT * FROM read_csv('{0}/*.csv'))
-            TO '{0}/{1} - All data.CSV'
+            TO '{0}/{1}.CSV'
             (FORMAT 'CSV')
         '''.format(DATA_PATH, consolidated_file_name))
 
