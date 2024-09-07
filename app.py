@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, send_file, Response
+from flask import Flask, render_template, jsonify, request, send_file
 import os
 from datetime import datetime
 
@@ -55,22 +55,15 @@ def index():
         has_more=has_more,
         )
 
-@app.route('/download/<ticker>')
-def download_file(ticker):
-    file_path = os.path.join('./data', f'{ticker}.csv')
-    if os.path.exists(file_path):
-        def generate():
-            with open(ticker, 'rb') as f:
-                while True:
-                    chunk = f.read(4096)
-                    if not chunk:
-                        break
-                    yield chunk
-
-        return Response(generate(), mimetype='text/csv',
-                        headers={"Content-Disposition": f"attachment; filename={ticker}"})
+@app.route('/download/<path:filename>')
+def download_file(filename):
+    file_path = os.path.join('./data', filename)
+    if os.path.exists(file_path) and filename.lower().endswith('.csv'):
+        return send_file(file_path, as_attachment=True)
     else:
-        return "File not found", 404
+        return "File not found or invalid file format", 404
+
+
 
 @app.route('/api/symbols_info')
 def api_tickers():

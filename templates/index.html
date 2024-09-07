@@ -106,10 +106,8 @@
                     {{ ticker.file_size }}
                 </div>
                 <div class="shrink-0">
-                    <a
-                        href="{{ url_for('download_file', ticker=ticker.ticker) }}"
-                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#007BFF] text-white text-sm font-medium leading-normal w-fit no-underline"
-                    >
+                    <a href="{{ url_for('download_file', filename=ticker.ticker + '.csv') }}"
+                       class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#007BFF] text-white text-sm font-medium leading-normal w-fit no-underline">
                         <span class="truncate">Download</span>
                     </a>
                 </div>
