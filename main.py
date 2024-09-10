@@ -2,6 +2,9 @@ from flask import Flask, render_template, jsonify, request, send_file
 import os
 from datetime import datetime
 
+#HOST = os.getenv('FLASK_RUN_HOST', '0.0.0.0')
+#PORT = os.getenv('PORT', 8080)
+
 app = Flask(__name__)
 
 def get_file_size(file_path):
@@ -71,4 +74,4 @@ def api_tickers():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0' port=8080)
+    app.run()
