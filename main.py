@@ -48,9 +48,16 @@ def get_tickers(search_query=None):
 @app.route('/', methods=['GET'])
 def index():
     search_query = request.args.get('search', '')
-    all_tickers = get_tickers(search_query)
-    displayed_tickers = all_tickers[:7]  # Only take the first 10
-    has_more = len(all_tickers) > 7  # Check if there are more than 10 results
+    try:
+        all_tickers = get_tickers(search_query)
+        if all_tickers is None:
+            all_tickers = []
+    except Exception as e:
+        print(f"Error fetching tickers: {e}")
+        all_tickers = []
+
+    displayed_tickers = all_tickers[:7]
+    has_more = len(all_tickers) > 7
     return render_template(
         'index.html',
         tickers=displayed_tickers,
