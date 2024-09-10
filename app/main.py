@@ -20,7 +20,7 @@ def get_file_size(file_path):
 def get_tickers(search_query=None):
     data_dir = './data'
     files = [f for f in os.listdir(data_dir) if f.endswith('.csv')]
-    files.append("503 S&P Symbols - All data.CSV")
+    #files.append("503 S&P Symbols - All data.CSV")
     tickers = []
     for file in files:
         file_path = os.path.join(data_dir, file)
@@ -81,4 +81,4 @@ def api_tickers():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=8080)

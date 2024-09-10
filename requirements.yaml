@@ -9,6 +9,4 @@ dependencies:
   - alpaca-py
   - pytz
   - duckdb
-  - flask
-  - gunicorn
   - lxml

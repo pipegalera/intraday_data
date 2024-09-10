@@ -1,8 +1,0 @@
-pandas
-python-dotenv
-alpaca-py
-pytz
-duckdb
-flask
-gunicorn
-lxml
