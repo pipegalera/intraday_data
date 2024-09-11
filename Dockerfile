@@ -10,6 +10,7 @@ RUN adduser --disabled-password --gecos '' appuser
 USER appuser
 
 EXPOSE 8080
+ENV FLASK_APP=app.py
 
 # Run the application
 CMD ["gunicorn", "--chdir", "/app", "-b", "0.0.0.0:8080", "main:app"]
