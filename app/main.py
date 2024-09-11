@@ -3,10 +3,8 @@ from urllib.parse import unquote
 import os
 from datetime import datetime
 
-#HOST = os.getenv('FLASK_RUN_HOST', '0.0.0.0')
-#PORT = os.getenv('PORT', 8080)
-
-app = Flask(__name__)
+app = Flask(__name__,
+       static_folder='./data')
 
 def get_file_size(file_path):
     size_bytes = os.path.getsize(file_path)
@@ -18,8 +16,7 @@ def get_file_size(file_path):
         return f"{size_mb} MB"
 
 def get_symbols(search_query=None):
-    #data_dir =  '/Users/pipegalera/dev/Documents/GitHub/intraday_data/app/data'
-    data_dir = './data'
+    data_dir = os.path.join(os.path.dirname(__file__), 'data')
     files = [f for f in os.listdir(data_dir) if (f.endswith('.csv') or f.endswith('.CSV'))]
 
     symbols = []
@@ -67,8 +64,7 @@ def index():
 
 @app.route('/download/<path:filename>', methods=['GET', 'POST'])
 def download_file(filename):
-    #data_dir =  '/Users/pipegalera/dev/Documents/GitHub/intraday_data/app/data'
-    data_dir = './data'
+    data_dir = os.path.join(os.path.dirname(__file__), 'data')
     decoded_filename = unquote(filename).lower()
 
     for file in os.listdir(data_dir):
@@ -84,4 +80,3 @@ def download_file(filename):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
-    #app.run(debug=True, port=8080)
