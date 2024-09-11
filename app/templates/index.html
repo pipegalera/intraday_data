@@ -50,34 +50,44 @@
             </header>
 
             <!-- Search form -->
-            <form action="/" method="GET" class="mb-8">
-                <label class="flex flex-col w-full">
-                    <div class="flex w-full items-stretch rounded-xl h-12">
+            <div
+                class="flex items-center gap-4 py-4 border-b border-gray-200 last:border-b-0"
+            >
+                <form action="/" method="GET" class="w-full max-w-3xl">
+                    <label class="flex flex-col min-w-40 h-12 w-full">
                         <div
-                            class="text-gray-600 flex bg-white items-center justify-center pl-4 rounded-l-xl"
+                            class="flex w-full flex-1 items-stretch rounded-xl h-full border border-gray-300 focus-within:border-blue-500 transition-colors duration-200 ease-in-out"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="currentColor"
-                                viewBox="0 0 256 256"
+                            <input
+                                name="search"
+                                type="text"
+                                placeholder="Search any symbols"
+                                value="{{ search_query }}"
+                                class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-xl text-[#333333] focus:outline-none focus:ring-0 border-none bg-white h-full placeholder:text-[#999999] px-6 text-base font-normal leading-normal"
+                            />
+                            <button
+                                type="submit"
+                                class="text-blue-500 hover:text-blue-600 flex border-none bg-white items-center justify-center px-6 rounded-r-xl cursor-pointer transition-colors duration-200 ease-in-out"
+                                data-icon="MagnifyingGlass"
+                                data-size="28px"
+                                data-weight="regular"
                             >
-                                <path
-                                    d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
-                                ></path>
-                            </svg>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="28px"
+                                    height="28px"
+                                    fill="currentColor"
+                                    viewBox="0 0 256 256"
+                                >
+                                    <path
+                                        d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                                    ></path>
+                                </svg>
+                            </button>
                         </div>
-                        <input
-                            name="search"
-                            type="text"
-                            placeholder="Search symbol and press enter..."
-                            value="{{ search_query }}"
-                            class="flex-grow px-4 py-2 rounded-r-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                </label>
-            </form>
+                    </label>
+                </form>
+            </div>
 
             <!-- Symbol list -->
             {% for symbol in symbols %}
