@@ -1,0 +1,8 @@
+services:
+  web:
+    image: app
+    ports:
+      - "8080:8080"
+    volumes:
+      - /home/pipegalera/volumes/intraday_data:/app/data
+    restart: always
