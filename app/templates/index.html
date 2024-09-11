@@ -27,26 +27,35 @@
             "
         >
             <!-- Header content -->
-            <div
-                class="text-[36px] font-bold leading-tight tracking-[-0.015em] px-4 py-4 w-full text-left max-w-2xl bg-gradient-to-r from-sky-500 via-blue-500 to-blue-600 text-transparent bg-clip-text"
-            >
-                EasyFinData.com
-            </div>
-            <!-- Description -->
-            <div class="px-4 py-4 w-full max-w-2xl">
-                <p
-                    class="text-[#333333] text-base font-medium leading-normal"
+            <div class="text-left px-4 py-4 w-full max-w-2xl">
+                <h1
+                    class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"
                 >
-                    1 Minute S&P500 intraday data from
-                    2016 on.
-                <br class="py-0">
-                Hourly updated, free and
+                    <a href="/">
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400"
+                            >EasyFinData.com</span
+                        >
+                    </a>
+                </h1>
+
+                <p
+                    class="text-lg font-normal text-gray-500 lg:text-xl dark:text-black-400"
+                >
+                    1 Minute S&P500 intraday data from 2016 on.
+                </p>
+                <p
+                    class="text-lg font-normal text-gray-500 lg:text-xl dark:text-black-400"
+                >
+                    Hourly updated, free and
                     <a
                         href="https://github.com/pipegalera/intraday_data"
-                        style="text-decoration: underline; color: #007BFF;"
-                        > open source.</a
+                        class="underline underline-offset-3 decoration-blue-400 dark:decoration-blue-600"
+                        >open source.</a
+                    >
                 </p>
             </div>
+
             <!-- Search form -->
             <form action="/" method="GET" class="px-4 py-4 w-full max-w-2xl">
                 <label class="flex flex-col min-w-40 h-12 w-full">
@@ -82,8 +91,8 @@
                 </label>
             </form>
 
-            <!-- Ticker list -->
-            {% for ticker in tickers %}
+            <!-- Symbol list -->
+            {% for symbol in symbols %}
             <div
                 class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between w-full max-w-2xl"
             >
@@ -91,23 +100,25 @@
                     <p
                         class="text-[#333333] text-base font-medium leading-normal line-clamp-1"
                     >
-                        {{ ticker.ticker }}
+                        {{ symbol.symbol }}
                     </p>
                     <p
                         class="text-[#666666] text-sm font-normal leading-normal line-clamp-2"
                     >
-                        Updated {{ ticker.hours_ago }} hours, {{
-                        ticker.minutes_ago }} minutes ago
+                        Updated {{ symbol.hours_ago }} hours, {{
+                        symbol.minutes_ago }} minutes ago
                     </p>
                 </div>
                 <div
                     class="text-[#666666] text-sm font-normal leading-normal mr-4"
                 >
-                    {{ ticker.file_size }}
+                    {{ symbol.file_size }}
                 </div>
                 <div class="shrink-0">
-                    <a href="{{ url_for('download_file', filename=ticker.ticker + '.csv') }}"
-                       class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#007BFF] text-white text-sm font-medium leading-normal w-fit no-underline">
+                    <a
+                        href="{{ url_for('download_file', filename=symbol.symbol + '.csv') }}"
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#007BFF] text-white text-sm font-medium leading-normal w-fit no-underline"
+                    >
                         <span class="truncate">Download</span>
                     </a>
                 </div>
@@ -116,7 +127,9 @@
 
             <!-- Display dots and total count if there are more results -->
             {% if has_more %}
-            <div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-center w-full max-w-2xl pb-4">
+            <div
+                class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-center w-full max-w-2xl pb-4"
+            >
                 <p class="text-[#666666] text-base font-normal leading-normal">
                     ... (503 symbols in total)
                 </p>
@@ -124,14 +137,14 @@
             {% endif %}
             <!-- Footer -->
             <div class="w-full bg-[#F5F5F5]">
-                <hr class="border-t border-[#CCCCCC] mb-4">
+                <hr class="border-t border-[#CCCCCC] mb-4" />
                 <footer
                     class="flex flex-col gap-6 px-5 py-10 text-center @container"
                 >
                     <p
-                        class="text-[#666666] text-base font-normal leading-normal"
+                        class="text-[#666666] text-sm font-normal leading-normal"
                     >
-                        Copyright 2024 EasyFinData.com
+                        🚧 WIP - site by @pipegalera 🚧
                     </p>
                 </footer>
             </div>
