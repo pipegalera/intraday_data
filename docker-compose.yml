@@ -4,6 +4,5 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      #  - /Users/pipegalera/dev/Documents/GitHub/intraday_data/app/storage:/app/storage
       - /data/coolify/applications/zc4g8k040gwgckog48800w4w/storage:/app/storage
     restart: always
