@@ -1,35 +1,29 @@
-<html>
+<html lang="en">
     <head>
-        <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com/"
-            crossorigin=""
-        />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>EasyFinData.com</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
         <link
             rel="stylesheet"
-            as="style"
-            onload="this.rel='stylesheet'"
-            href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Work+Sans%3Awght%40400%3B500%3B700%3B900"
+            href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Work+Sans:wght@400;500;700;900"
         />
-
-        <title>EasyFinData.com</title>
         <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
-
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <style>
+            body {
+                font-family: "Work Sans", "Noto Sans", sans-serif;
+            }
+        </style>
     </head>
-
-    <body>
-        <div
-            class="relative flex size-full min-h-screen flex-col bg-gradient-to-b from-blue-100 via-[#F5F5F5] to-[#F5F5F5] dark justify-between group/design-root overflow-x-hidden items-center"
-            style="
-                font-family: &quot;Work Sans&quot;, &quot;Noto Sans&quot;,
-                    sans-serif;
-            "
-        >
+    <body
+        class="bg-gradient-to-b from-blue-100 via-[#F5F5F5] to-[#F5F5F5] min-h-screen flex flex-col"
+    >
+        <div class="flex-grow container mx-auto px-4 py-8 max-w-2xl">
             <!-- Header content -->
-            <div class="text-left px-4 py-4 w-full max-w-2xl">
+            <header class="mb-8">
                 <h1
-                    class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"
+                    class="mb-4 text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900"
                 >
                     <a href="/">
                         <span
@@ -38,14 +32,13 @@
                         >
                     </a>
                 </h1>
-
                 <p
-                    class="text-lg font-normal text-gray-500 lg:text-xl dark:text-black-400"
+                    class="text-base sm:text-lg font-normal text-gray-500 dark:text-gray-400"
                 >
                     1 Minute S&P500 intraday data from 2016 on.
                 </p>
                 <p
-                    class="text-lg font-normal text-gray-500 lg:text-xl dark:text-black-400"
+                    class="text-base sm:text-lg font-normal text-gray-500 dark:text-gray-400"
                 >
                     Hourly updated, free and
                     <a
@@ -54,24 +47,19 @@
                         >open source.</a
                     >
                 </p>
-            </div>
+            </header>
 
             <!-- Search form -->
-            <form action="/" method="GET" class="px-4 py-4 w-full max-w-2xl">
-                <label class="flex flex-col min-w-40 h-12 w-full">
-                    <div
-                        class="flex w-full flex-1 items-stretch rounded-xl h-full"
-                    >
+            <form action="/" method="GET" class="mb-8">
+                <label class="flex flex-col w-full">
+                    <div class="flex w-full items-stretch rounded-xl h-12">
                         <div
-                            class="text-[#333333] flex border-none bg-[#FFFFFF] items-center justify-center pl-4 rounded-l-xl border-r-0"
-                            data-icon="MagnifyingGlass"
-                            data-size="24px"
-                            data-weight="regular"
+                            class="text-gray-600 flex bg-white items-center justify-center pl-4 rounded-l-xl"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="24px"
-                                height="24px"
+                                width="24"
+                                height="24"
                                 fill="currentColor"
                                 viewBox="0 0 256 256"
                             >
@@ -85,7 +73,7 @@
                             type="text"
                             placeholder="Search symbol and press enter..."
                             value="{{ search_query }}"
-                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#333333] focus:outline-0 focus:ring-0 border-none bg-[#FFFFFF] focus:border-none h-full placeholder:text-[#999999] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                            class="flex-grow px-4 py-2 rounded-r-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                 </label>
@@ -94,60 +82,46 @@
             <!-- Symbol list -->
             {% for symbol in symbols %}
             <div
-                class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between w-full max-w-2xl"
+                class="flex items-center gap-4 py-4 border-b border-gray-200 last:border-b-0"
             >
-                <div class="flex flex-col justify-center flex-grow">
-                    <p
-                        class="text-[#333333] text-base font-medium leading-normal line-clamp-1"
-                    >
+                <div class="flex-grow">
+                    <p class="text-gray-800 text-base font-medium">
                         {{ symbol.symbol }}
                     </p>
-                    <p
-                        class="text-[#666666] text-sm font-normal leading-normal line-clamp-2"
-                    >
+                    <p class="text-gray-600 text-sm">
                         Updated {{ symbol.hours_ago }} hours, {{
                         symbol.minutes_ago }} minutes ago
                     </p>
                 </div>
-                <div
-                    class="text-[#666666] text-sm font-normal leading-normal mr-4"
-                >
+                <div class="text-gray-600 text-sm mr-4">
                     {{ symbol.file_size }}
                 </div>
-                <div class="shrink-0">
-                    <a
-                        href="{{ url_for('download_file', filename=symbol.symbol + '.csv') }}"
-                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#007BFF] text-white text-sm font-medium leading-normal w-fit no-underline"
-                    >
-                        <span class="truncate">Download</span>
-                    </a>
-                </div>
+                <a
+                    href="{{ url_for('download_file', filename=symbol.symbol + '.csv') }}"
+                    class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg"
+                >
+                    Download
+                </a>
             </div>
             {% endfor %}
 
             <!-- Display dots and total count if there are more results -->
             {% if has_more %}
-            <div
-                class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-center w-full max-w-2xl pb-4"
-            >
-                <p class="text-[#666666] text-base font-normal leading-normal">
+            <div class="text-center py-4">
+                <p class="text-gray-600 text-base">
                     ... (503 symbols in total)
                 </p>
             </div>
             {% endif %}
-            <!-- Footer -->
-            <div class="w-full bg-[#F5F5F5]">
-                <hr class="border-t border-[#CCCCCC] mb-4" />
-                <footer
-                    class="flex flex-col gap-6 px-5 py-10 text-center @container"
-                >
-                    <p
-                        class="text-[#666666] text-sm font-normal leading-normal"
-                    >
-                        🚧 WIP - site by @pipegalera 🚧
-                    </p>
-                </footer>
-            </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 mt-8">
+            <div class="container mx-auto px-4 py-8 text-center">
+                <p class="text-gray-600 text-sm">
+                    🚧 WIP - site by @pipegalera 🚧
+                </p>
+            </div>
+        </footer>
     </body>
 </html>
