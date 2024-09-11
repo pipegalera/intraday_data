@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 app = Flask(__name__,
-       static_folder='./data')
+       static_folder='./storage')
 
 def get_file_size(file_path):
     size_bytes = os.path.getsize(file_path)
@@ -16,7 +16,7 @@ def get_file_size(file_path):
         return f"{size_mb} MB"
 
 def get_symbols(search_query=None):
-    data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    data_dir = os.path.join(os.path.dirname(__file__), 'storage')
     files = [f for f in os.listdir(data_dir) if (f.endswith('.csv') or f.endswith('.CSV'))]
 
     symbols = []
@@ -64,7 +64,7 @@ def index():
 
 @app.route('/download/<path:filename>', methods=['GET', 'POST'])
 def download_file(filename):
-    data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    data_dir = os.path.join(os.path.dirname(__file__), 'storage')
     decoded_filename = unquote(filename).lower()
 
     for file in os.listdir(data_dir):
