@@ -4,5 +4,5 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /home/pipegalera/volumes/intraday_data:/app/data
+      - /home/pipegalera/volumes/intraday_data:/app/storage
     restart: always

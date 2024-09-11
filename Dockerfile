@@ -8,7 +8,7 @@ COPY ./app/templates /app/templates
 
 RUN pip install -r /app/requirements.txt
 
-VOLUME /app/data
+VOLUME /app/storage
 
 EXPOSE 8080
 ENV FLASK_APP=app.py
