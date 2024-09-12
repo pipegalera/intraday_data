@@ -12,9 +12,6 @@ from alpaca.data.requests import StockBarsRequest
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
 DATA_PATH = os.getenv("DATA_PATH")
-HOME_PATH = os.getenv("HOME_PATH")
-
-os.chdir(HOME_PATH)
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute) # Intraday 1Min data
 start_date="2016-01-01" # Alpaca markets API doesn't go further in time

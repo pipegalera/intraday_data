@@ -15,7 +15,7 @@ ALPACA_SECRET = os.getenv("ALPACA_SECRET")
 DATA_PATH = os.getenv("DATA_PATH")
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute)
-start_date = datetime.now(timezone('US/Eastern')) - timedelta(hours=5)
+start_date = datetime.now(timezone('US/Eastern')) - timedelta(days=3)
 
 def get_updated_stock_data(symbols):
     data_client = StockHistoricalDataClient(ALPACA_KEY, ALPACA_SECRET)
@@ -30,13 +30,11 @@ def get_updated_stock_data(symbols):
     return df
 
 def save_updated_stock_data(df):
-
     print(f"Updating the CSV files with the new data...")
     start_time = time.time()
 
     # Update each symbol CSV file
     symbols = df.reset_index()["symbol"].unique()
-    consolidated_file_name = '503 S&P Symbols - All data'
     for symbol in symbols:
         print(f"Updating: {symbol}...")
         combined_data = (f'''
@@ -56,11 +54,13 @@ def save_updated_stock_data(df):
             ''')
 
     # Update the consolidated CSV file
+    consolidated_file_name = '503 S&P Symbols - All data'
+
     print(f"Updating the consolidated CSV file with all the data...")
     duckdb.query(f"""
     COPY (
         SELECT * FROM read_csv_auto('{DATA_PATH}/*.csv')
-    ) TO '{DATA_PATH}/503 S&P Symbols - All data.CSV'
+    ) TO '{DATA_PATH}/{consolidated_file_name}.CSV'
     WITH (FORMAT 'CSV', HEADER)
     """)
     end_time = time.time()
@@ -72,7 +72,7 @@ def save_updated_stock_data(df):
 
 
 def main():
-    spy_symbols = [os.path.splitext(file)[0] for file in os.listdir(DATA_PATH) if file.endswith('.csv')]
+    spy_symbols = [os.path.splitext(file)[0] for file in os.listdir(DATA_PATH) if file.endswith('.csv') and '_' not in file]
     df = get_updated_stock_data(spy_symbols)
     save_updated_stock_data(df)
 
