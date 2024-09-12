@@ -521,7 +521,9 @@ def get_file_size(file_path):
 
 def get_symbols(search_query=None):
     data_dir = os.path.join(os.path.dirname(__file__), 'storage')
-    files = [f for f in os.listdir(data_dir) if (f.endswith('.csv') or f.endswith('.CSV'))]
+    files = [f for f in os.listdir(data_dir) if
+        (f.endswith('.csv') or f.endswith('.CSV') or '_' not in f)
+    ]
 
     symbols = []
     for file in files:
