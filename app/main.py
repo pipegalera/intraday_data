@@ -519,12 +519,12 @@ def get_file_size(file_path):
         size_mb = round(size_bytes / (1024 * 1024), 2)
         return f"{size_mb} MB"
 
+
 def get_symbols(search_query=None):
     data_dir = os.path.join(os.path.dirname(__file__), 'storage')
     files = [f for f in os.listdir(data_dir) if
-        (f.endswith('.csv') or f.endswith('.CSV') or '_' not in f)
+        (f.endswith('.csv') or f.endswith('.CSV')) and '_' not in f
     ]
-
     symbols = []
     for file in files:
         file_path = os.path.join(data_dir, file)
