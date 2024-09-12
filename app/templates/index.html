@@ -61,7 +61,7 @@
                             <input
                                 name="search"
                                 type="text"
-                                placeholder="Search any symbols"
+                                placeholder="Search any S&P stock"
                                 value="{{ search_query }}"
                                 class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-xl text-[#333333] focus:outline-none focus:ring-0 border-none bg-white h-full placeholder:text-[#999999] px-6 text-base font-normal leading-normal"
                             />
@@ -95,11 +95,14 @@
                 class="flex items-center gap-4 py-4 border-b border-gray-200 last:border-b-0"
             >
                 <div class="flex-grow">
-                    <p class="text-gray-800 text-base font-medium">
-                        {{ symbol.symbol }}
-                    </p>
+                    <p
+                        class="text-gray-900 text-base font-medium leading-normal line-clamp-1"
+                    >
+                        {{ symbol.symbol }} <span class="text-gray-600 text-sm">:</span> {{ symbol.name }}
+                    </>
                     <p class="text-gray-600 text-sm">
-                        Updated {{ symbol.hours_ago }} hours, {{
+                        <span class="bg-gray-200 rounded px-1">.csv</span> file
+                        updated {{ symbol.hours_ago }} hours, {{
                         symbol.minutes_ago }} minutes ago
                     </p>
                 </div>
