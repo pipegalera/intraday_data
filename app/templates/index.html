@@ -125,7 +125,7 @@
             {% if symbols|length > 10 %}
             <div id="extend-button" class="text-center mt-4">
                 <button
-                    onclick="extendList()"
+                    id="showAllButton"
                     class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium py-2 px-4 rounded-lg"
                 >
                     Show All
@@ -164,17 +164,28 @@
                 </div>
                 {% endfor %}
             </div>
-
-            <script>
-                function extendList() {
-                    document.getElementById("extended-list").style.display =
-                        "block";
-                    document.getElementById("extend-button").style.display =
-                        "none";
-                }
-            </script>
             {% endif %}
         </div>
+        <button
+            id="backToTop"
+            class="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-2 shadow-lg opacity-0 transition-opacity duration-300 hover:bg-blue-600"
+            style="display: none"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 10l7-7m0 0l7 7m-7-7v18"
+                />
+            </svg>
+        </button>
 
         <!-- Footer -->
         <footer class="bg-gray-100 mt-8">
@@ -184,5 +195,6 @@
                 </p>
             </div>
         </footer>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </body>
 </html>
