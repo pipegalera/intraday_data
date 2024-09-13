@@ -507,8 +507,8 @@ symbols_names = {'MMM': '3M',
  'ZBH': 'Zimmer Biomet',
  'ZTS': 'Zoetis'}
 
-app = Flask(__name__,
-       static_folder='./storage')
+app = Flask(__name__, static_folder='static')
+
 
 def get_file_size(file_path):
     size_bytes = os.path.getsize(file_path)
