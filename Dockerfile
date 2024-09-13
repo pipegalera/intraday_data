@@ -5,6 +5,7 @@ WORKDIR /app
 COPY ./app/main.py /app/
 COPY ./app/requirements.txt /app/
 COPY ./app/templates /app/templates
+COPY ./app/static /app/static
 
 RUN pip install -r /app/requirements.txt
 
