@@ -90,41 +90,89 @@
             </div>
 
             <!-- Symbol list -->
-            {% for symbol in symbols %}
-            <div
-                class="flex items-center gap-4 py-4 border-b border-gray-200 last:border-b-0"
-            >
-                <div class="flex-grow">
-                    <p
-                        class="text-gray-900 text-base font-medium leading-normal line-clamp-1"
-                    >
-                        {{ symbol.symbol }} <span class="text-gray-600 text-sm">:</span> {{ symbol.name }}
-                    </>
-                    <p class="text-gray-600 text-sm">
-                        <span class="bg-gray-200 rounded px-1">.csv</span> file
-                        updated {{ symbol.hours_ago }} hours, {{
-                        symbol.minutes_ago }} minutes ago
-                    </p>
-                </div>
-                <div class="text-gray-600 text-sm mr-4">
-                    {{ symbol.file_size }}
-                </div>
-                <a
-                    href="{{ url_for('download_file', filename=symbol.symbol + '.csv') }}"
-                    class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg"
+            <div id="symbol-list">
+                {% for symbol in symbols[:10] %}
+                <div
+                    class="flex items-center gap-4 py-4 border-b border-gray-200 last:border-b-0"
                 >
-                    Download
-                </a>
+                    <div class="flex-grow">
+                        <p
+                            class="text-gray-900 text-base font-medium leading-normal line-clamp-1"
+                        >
+                            {{ symbol.symbol }}
+                            <span class="text-gray-600 text-sm">:</span> {{
+                            symbol.name }}
+                        </p>
+                        <p class="text-gray-600 text-sm">
+                            <span class="bg-gray-200 rounded px-1">.csv</span>
+                            file updated {{ symbol.hours_ago }} hours, {{
+                            symbol.minutes_ago }} minutes ago
+                        </p>
+                    </div>
+                    <div class="text-gray-600 text-sm mr-4">
+                        {{ symbol.file_size }}
+                    </div>
+                    <a
+                        href="{{ url_for('download_file', filename=symbol.symbol + '.csv') }}"
+                        class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg"
+                    >
+                        Download
+                    </a>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
 
-            <!-- Display dots and total count if there are more results -->
-            {% if has_more %}
-            <div class="text-center py-4">
-                <p class="text-gray-600 text-base">
-                    ... (503 symbols in total)
-                </p>
+            {% if symbols|length > 10 %}
+            <div id="extend-button" class="text-center mt-4">
+                <button
+                    onclick="extendList()"
+                    class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium py-2 px-4 rounded-lg"
+                >
+                    Show All
+                </button>
             </div>
+
+            <div id="extended-list" style="display: none">
+                {% for symbol in symbols[10:] %}
+                <div
+                    class="flex items-center gap-4 py-4 border-b border-gray-200 last:border-b-0"
+                >
+                    <!-- Same content as above -->
+                    <div class="flex-grow">
+                        <p
+                            class="text-gray-900 text-base font-medium leading-normal line-clamp-1"
+                        >
+                            {{ symbol.symbol }}
+                            <span class="text-gray-600 text-sm">:</span> {{
+                            symbol.name }}
+                        </p>
+                        <p class="text-gray-600 text-sm">
+                            <span class="bg-gray-200 rounded px-1">.csv</span>
+                            file updated {{ symbol.hours_ago }} hours, {{
+                            symbol.minutes_ago }} minutes ago
+                        </p>
+                    </div>
+                    <div class="text-gray-600 text-sm mr-4">
+                        {{ symbol.file_size }}
+                    </div>
+                    <a
+                        href="{{ url_for('download_file', filename=symbol.symbol + '.csv') }}"
+                        class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg"
+                    >
+                        Download
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <script>
+                function extendList() {
+                    document.getElementById("extended-list").style.display =
+                        "block";
+                    document.getElementById("extend-button").style.display =
+                        "none";
+                }
+            </script>
             {% endif %}
         </div>
 

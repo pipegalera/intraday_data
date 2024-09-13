@@ -562,14 +562,10 @@ def index():
         print(f"Error fetching symbols: {e}")
         all_symbols = []
 
-    displayed_symbols = all_symbols[:7]
-    has_more = len(all_symbols) > 7
-
     return render_template(
         'index.html',
-        symbols=displayed_symbols,
-        search_query=search_query,
-        has_more=has_more,
+        symbols=all_symbols,
+        search_query=search_query
     )
 
 @app.route('/download/<path:filename>', methods=['GET', 'POST'])
