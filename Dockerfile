@@ -6,6 +6,7 @@ COPY ./app/main.py /app/
 COPY ./app/requirements.txt /app/
 COPY ./app/templates /app/templates
 COPY ./app/static /app/static
+COPY ./src /app/src
 
 RUN pip install -r /app/requirements.txt
 
