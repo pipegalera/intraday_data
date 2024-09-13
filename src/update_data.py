@@ -15,7 +15,12 @@ ALPACA_SECRET = os.getenv("ALPACA_SECRET")
 DATA_PATH = os.getenv("DATA_PATH")
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute)
-start_date = datetime.now(timezone('US/Eastern')) - timedelta(days=3)
+start_date = datetime.now(timezone('US/Eastern')) - timedelta(hours=1)
+
+def get_symbols_SPY():
+    url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+    df = pd.read_html(url)[0]
+    return dict(zip(df["Symbol"], df["Security"]))
 
 def get_updated_stock_data(symbols):
     data_client = StockHistoricalDataClient(ALPACA_KEY, ALPACA_SECRET)
@@ -55,11 +60,13 @@ def save_updated_stock_data(df):
 
     # Update the consolidated CSV file
     consolidated_file_name = '503 S&P Symbols'
+    csv_files = [f for f in os.listdir(DATA_PATH) if f.endswith('.csv')]
+    csv_filepaths = ','.join([f"'{DATA_PATH}/{f}'" for f in csv_files])
 
     print(f"Updating the consolidated CSV file with all the data...")
     duckdb.query(f"""
     COPY (
-        SELECT * FROM read_csv_auto('{DATA_PATH}/*.csv')
+        SELECT * FROM read_csv_auto([{csv_filepaths}])
     ) TO '{DATA_PATH}/{consolidated_file_name}.CSV'
     WITH (FORMAT 'CSV', HEADER)
     """)
