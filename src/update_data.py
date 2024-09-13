@@ -54,7 +54,7 @@ def save_updated_stock_data(df):
             ''')
 
     # Update the consolidated CSV file
-    consolidated_file_name = '503 S&P Symbols - All data'
+    consolidated_file_name = '503 S&P Symbols'
 
     print(f"Updating the consolidated CSV file with all the data...")
     duckdb.query(f"""

@@ -64,7 +64,7 @@ def main():
         save_stock_data(df)
 
     # If there is no symbols left to be downloaded, stack them in a single file
-    consolidated_file_name = '503 S&P Symbols - All data'
+    consolidated_file_name = '503 S&P Symbols'
     if len(symbols) == 0:
         print("All symbols are already downloaded. Creating a unique CSV file with all the symbols...")
         duckdb.query('''

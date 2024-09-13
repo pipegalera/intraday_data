@@ -505,7 +505,8 @@ symbols_names = {'MMM': '3M',
  'YUM': 'Yum! Brands',
  'ZBRA': 'Zebra Technologies',
  'ZBH': 'Zimmer Biomet',
- 'ZTS': 'Zoetis'}
+ 'ZTS': 'Zoetis',
+ '503 S&P Symbols': 'All data',}
 
 app = Flask(__name__, static_folder='static')
 
@@ -523,30 +524,31 @@ def get_file_size(file_path):
 def get_symbols(search_query=None):
     data_dir = os.path.join(os.path.dirname(__file__), 'storage')
     files = [f for f in os.listdir(data_dir) if
-        (f.endswith('.csv') or f.endswith('.CSV')) and '_' not in f
+        (f.lower().endswith('.csv')) and
+        '_' not in f
     ]
     symbols = []
     for file in files:
-        file_path = os.path.join(data_dir, file)
-        modified_time = os.path.getmtime(file_path)
-        time_delta = datetime.now() - datetime.fromtimestamp(modified_time)
-        hours_ago = time_delta.total_seconds() / 3600
-        minutes_ago = (time_delta.total_seconds() % 3600) / 60
+            file_path = os.path.join(data_dir, file)
+            modified_time = os.path.getmtime(file_path)
+            time_delta = datetime.now() - datetime.fromtimestamp(modified_time)
+            hours_ago = time_delta.total_seconds() / 3600
+            minutes_ago = (time_delta.total_seconds() % 3600) / 60
 
-        symbol = os.path.splitext(file)[0]
-        symbol_name = symbols_names.get(symbol, "")
+            symbol = os.path.splitext(file)[0]
+            symbol_name = symbols_names.get(symbol, "")
 
-        if (search_query is None or
-            search_query.lower() in symbol.lower() or
-            search_query.lower() in symbol_name.lower()):
-            symbols.append({
-                'symbol': symbol,
-                'name': symbols_names[symbol],
-                'hours_ago': int(hours_ago),
-                'minutes_ago': int(minutes_ago),
-                'file_size': get_file_size(file_path),
-                'modified_time': modified_time
-            })
+            if (search_query is None or
+                search_query.lower() in symbol.lower() or
+                search_query.lower() in symbol_name.lower()):
+                symbols.append({
+                    'symbol': symbol,
+                    'name': symbols_names.get(symbol, "Unknown"),
+                    'hours_ago': int(hours_ago),
+                    'minutes_ago': int(minutes_ago),
+                    'file_size': get_file_size(file_path),
+                    'modified_time': modified_time
+                })
 
     symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['modified_time']))
 
