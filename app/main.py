@@ -545,9 +545,10 @@ def get_symbols(search_query=None):
                 'hours_ago': int(hours_ago),
                 'minutes_ago': int(minutes_ago),
                 'file_size': get_file_size(file_path),
+                'modified_time': modified_time
             })
 
-    symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['symbol']))
+    symbols.sort(key=lambda x: x['modified_time'])
 
     return symbols
 
