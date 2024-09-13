@@ -543,7 +543,7 @@ def get_symbols(search_query=None):
                 search_query.lower() in symbol_name.lower()):
                 symbols.append({
                     'symbol': symbol,
-                    'name': symbols_names.get(symbol, "Unknown"),
+                    'name': symbols_names.get(symbol),
                     'hours_ago': int(hours_ago),
                     'minutes_ago': int(minutes_ago),
                     'file_size': get_file_size(file_path),
