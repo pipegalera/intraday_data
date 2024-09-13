@@ -550,7 +550,7 @@ def get_symbols(search_query=None):
                     'modified_time': modified_time
                 })
 
-    symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['modified_time']))
+    symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['symbol']))
 
     return symbols
 
