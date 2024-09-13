@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Throttle function to limit how often a function can fire
+  console.log("DOM fully loaded and parsed");
+
   function throttle(func, limit) {
     let inThrottle;
     return function () {
@@ -13,21 +14,31 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
-  // Make extendList function global
   window.extendList = function () {
+    console.log("extendList function called");
     const extendedList = document.getElementById("extended-list");
     const extendButton = document.getElementById("extend-button");
+    const backToTopButton = document.getElementById("backToTop");
+
+    console.log("Extended list:", extendedList);
+    console.log("Extend button:", extendButton);
+    console.log("Back to top button:", backToTopButton);
 
     if (extendedList && extendButton) {
       extendedList.style.display = "block";
       extendButton.style.display = "none";
-      showBackToTopButton();
+      if (backToTopButton) {
+        showBackToTopButton();
+      } else {
+        console.error("Back to top button not found");
+      }
     } else {
       console.error("Extended list or extend button not found");
     }
   };
 
   function showBackToTopButton() {
+    console.log("showBackToTopButton function called");
     const backToTop = document.getElementById("backToTop");
     if (!backToTop) {
       console.error("Back to top button not found");
@@ -35,34 +46,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     backToTop.style.display = "block";
-    setTimeout(() => (backToTop.style.opacity = "1"), 50);
+    backToTop.style.opacity = "1";
 
-    // Throttled scroll event listener
-    window.addEventListener(
-      "scroll",
-      throttle(() => {
-        const scrollTop =
-          window.pageYOffset || document.documentElement.scrollTop;
-        backToTop.style.display = scrollTop > 200 ? "block" : "none";
-      }, 100),
-    );
+    const scrollHandler = throttle(() => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      backToTop.style.display = scrollTop > 200 ? "block" : "none";
+    }, 100);
+
+    window.addEventListener("scroll", scrollHandler);
 
     backToTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 
-  // Optional: Add event listener to the "Show All" button
+  // Initialize event listeners
   const showAllButton = document.getElementById("extend-button");
   if (showAllButton) {
+    console.log("Adding click event listener to Show All button");
     showAllButton.addEventListener("click", window.extendList);
   } else {
     console.error("Show All button not found");
   }
 
-  // Optional: Initialize back to top button if it's always present
-  const backToTopButton = document.getElementById("backToTop");
-  if (backToTopButton) {
-    showBackToTopButton();
-  }
+  console.log("Script execution completed");
 });
