@@ -2,6 +2,7 @@ from flask import Flask, Response, render_template, request, send_from_directory
 from urllib.parse import unquote
 from datetime import datetime
 import os
+import re
 
 symbols_names = {'MMM': '3M',
  'AOS': 'A. O. Smith',
@@ -563,21 +564,59 @@ def download_file(filename):
     for file in os.listdir(data_dir):
         if file.lower() == decoded_filename:
             file_path = os.path.join(data_dir, file)
+            file_size = os.path.getsize(file_path)
 
-            def generate():
-                with open(file_path, 'rb') as f:
-                    while True:
-                        chunk = f.read(4096)  # 4KB chunks
-                        if not chunk:
-                            break
-                        yield chunk
+            # Handle range header
+            range_header = request.headers.get('Range', None)
+            if range_header:
+                byte1, byte2 = 0, None
+                match = re.search(r'(\d+)-(\d*)', range_header)
+                groups = match.groups()
 
-            response = Response(generate(), mimetype='application/octet-stream')
-            response.headers.set('Content-Disposition', 'attachment', filename=file)
+                if groups[0]: byte1 = int(groups[0])
+                if groups[1]: byte2 = int(groups[1])
+
+                if byte2 is None:
+                    byte2 = file_size - 1
+
+                length = byte2 - byte1 + 1
+
+                def generate():
+                    with open(file_path, 'rb') as f:
+                        f.seek(byte1)
+                        remaining = length
+                        chunk_size = 8192  # 8KB chunks
+                        while remaining:
+                            chunk = f.read(min(chunk_size, remaining))
+                            if not chunk:
+                                break
+                            remaining -= len(chunk)
+                            yield chunk
+
+                response = Response(generate(), 206, mimetype='application/octet-stream',
+                                    content_type='application/octet-stream', direct_passthrough=True)
+                response.headers.add('Content-Range', f'bytes {byte1}-{byte2}/{file_size}')
+                response.headers.add('Accept-Ranges', 'bytes')
+                response.headers.add('Content-Length', str(length))
+            else:
+                def generate():
+                    with open(file_path, 'rb') as f:
+                        while True:
+                            chunk = f.read(8192)  # 8KB chunks
+                            if not chunk:
+                                break
+                            yield chunk
+
+                response = Response(generate(), mimetype='application/octet-stream',
+                                    content_type='application/octet-stream', direct_passthrough=True)
+                response.headers.add('Content-Length', str(file_size))
+                response.headers.add('Accept-Ranges', 'bytes')
+
+            response.headers.add('Content-Disposition', 'attachment', filename=file)
+            response.headers.add('Cache-Control', 'no-cache')
             return response
 
     abort(404, description="File not found or invalid file format")
-
 def stream_file(self, file_path, start, length, chunk_size):
     with open(file_path, 'rb') as f:
         f.seek(start)
