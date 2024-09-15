@@ -554,6 +554,7 @@ def get_symbols(search_query=None):
 
     symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['symbol']))
 
+    return symbols
 
 @app.route('/symbols-info')
 def check_file_sizes():
