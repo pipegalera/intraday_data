@@ -1,5 +1,6 @@
 flask
 gunicorn
+nginx
 pandas
 python-dotenv
 alpaca-py
