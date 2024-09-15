@@ -8,7 +8,7 @@ COPY ./app/templates /app/templates
 COPY ./app/static /app/static
 COPY ./src /app/src
 
-COPY /root/.venvs/venv /app/venv
+COPY  $HOME/.venvs/venv /app/venv
 
 ENV PATH="/app/venv/bin:$PATH"
 
