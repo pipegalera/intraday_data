@@ -2,6 +2,12 @@ FROM python:3.9-slim-buster
 
 WORKDIR /app
 
+# Install nginx
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY ./app/main.py /app/
 COPY ./requirements.txt /app/
 COPY ./app/templates /app/templates
@@ -16,8 +22,7 @@ VOLUME /app/storage
 
 EXPOSE 8080
 
-RUN apt-get update && apt-get install -y nginx
+RUN echo '#!/bin/bash\nnginx\ngunicorn --chdir /app -b 127.0.0.1:5000 main:app' > /start.sh && \
+    chmod +x /start.sh
 
-# Run the application
-RUN chmod +x /start.sh
 CMD ["/start.sh"]
