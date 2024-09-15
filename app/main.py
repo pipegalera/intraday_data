@@ -568,7 +568,11 @@ def check_file_sizes():
 
 
 def file_list():
-    files = [f for f in os.listdir("/app/storage") if f.endswith('.csv')]
+    data_dir = os.path.join(os.path.dirname(__file__), 'storage')
+    files = [f for f in os.listdir(data_dir) if
+        (f.lower().endswith('.csv')) and
+        '_' not in f
+    ]
     file_urls = [f'/downloads/{file}' for file in files]
     return render_template('file_list.html', file_urls=file_urls)
 
