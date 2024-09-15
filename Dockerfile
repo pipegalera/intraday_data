@@ -15,8 +15,8 @@ RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 VOLUME /app/storage
 
 EXPOSE 8080
-ENV FLASK_APP=app.py
 
+RUN apt-get update && apt-get install -y nginx
 
 # Run the application
 RUN chmod +x /start.sh
