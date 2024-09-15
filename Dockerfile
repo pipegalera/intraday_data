@@ -8,6 +8,7 @@ COPY ./app/templates /app/templates
 COPY ./app/static /app/static
 COPY ./src /app/src
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY start.sh /start.sh
 
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
@@ -15,5 +16,7 @@ VOLUME /app/storage
 
 EXPOSE 8080
 ENV FLASK_APP=app.py
+
+
 # Run the application
-CMD nginx && gunicorn --chdir /app -b 127.0.0.1:5000 main:app
+CMD ["/start.sh"]
