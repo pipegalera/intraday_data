@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, send_from_directory, abort, jsonify
 from urllib.parse import unquote
-import os
 from datetime import datetime
+import os
+import re
 
 symbols_names = {'MMM': '3M',
  'AOS': 'A. O. Smith',
@@ -562,14 +563,56 @@ def download_file(filename):
 
     for file in os.listdir(data_dir):
         if file.lower() == decoded_filename:
-            return send_from_directory(
-                directory=data_dir,
-                path=file,
-                as_attachment=True,
-                max_age=0
-            )
+            file_path = os.path.join(data_dir, file)
+            file_size = os.path.getsize(file_path)
+
+            chunk_size = 8 * 1024 * 1024
+
+            range_header = request.headers.get('Range', None)
+            if range_header:
+                byte1, byte2 = 0, None
+                match = re.search(r'(\d+)-(\d*)', range_header)
+                groups = match.groups()
+
+                if groups[0]: byte1 = int(groups[0])
+                if groups[1]: byte2 = int(groups[1])
+
+                if byte2 is not None:
+                    length = byte2 + 1 - byte1
+                else:
+                    length = file_size - byte1
+
+                resp = Response(
+                    self.stream_file(file_path, byte1, length, chunk_size),
+                    206,
+                    mimetype='application/octet-stream',
+                    direct_passthrough=True
+                )
+                resp.headers.add('Content-Range', f'bytes {byte1}-{byte1+length-1}/{file_size}')
+            else:
+                resp = Response(
+                    self.stream_file(file_path, 0, file_size, chunk_size),
+                    200,
+                    mimetype='application/octet-stream',
+                    direct_passthrough=True
+                )
+
+            resp.headers.add('Content-Length', str(file_size))
+            resp.headers.add('Content-Disposition', 'attachment', filename=file)
+            return resp
 
     abort(404, description="File not found or invalid file format")
+
+def stream_file(self, file_path, start, length, chunk_size):
+    with open(file_path, 'rb') as f:
+        f.seek(start)
+        remaining = length
+        while remaining:
+            chunk = f.read(min(chunk_size, remaining))
+            if not chunk:
+                break
+            remaining -= len(chunk)
+            yield chunk
 
 @app.route('/symbols-info')
 def check_file_sizes():
