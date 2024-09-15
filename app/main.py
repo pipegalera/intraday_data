@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, abort
+from flask import Flask, render_template, request, send_from_directory, abort, jsonify
 from urllib.parse import unquote
 import os
 from datetime import datetime
@@ -547,29 +547,13 @@ def get_symbols(search_query=None):
                     'hours_ago': int(hours_ago),
                     'minutes_ago': int(minutes_ago),
                     'file_size': get_file_size(file_path),
+                    'file_path': file_path,
                     'modified_time': modified_time
                 })
 
     symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['symbol']))
 
     return symbols
-
-@app.route('/', methods=['GET'])
-def index():
-    search_query = request.args.get('search', '')
-    try:
-        all_symbols = get_symbols(search_query)
-        if all_symbols is None:
-            all_symbols = []
-    except Exception as e:
-        print(f"Error fetching symbols: {e}")
-        all_symbols = []
-
-    return render_template(
-        'index.html',
-        symbols=all_symbols,
-        search_query=search_query
-    )
 
 @app.route('/download/<path:filename>', methods=['GET', 'POST'])
 def download_file(filename):
@@ -586,6 +570,34 @@ def download_file(filename):
             )
 
     abort(404, description="File not found or invalid file format")
+
+@app.route('/symbols-info')
+def check_file_sizes():
+    symbols = get_symbols()
+    return jsonify([{
+        'symbol': s['symbol'],
+        'name': s['name'],
+        'hours_ago': s['hours_ago'],
+        'minutes_ago': s['minutes_ago'],
+        'file_size': s['file_size']
+    } for s in symbols])
+
+@app.route('/', methods=['GET'])
+def index():
+    search_query = request.args.get('search', '')
+    try:
+        all_symbols = get_symbols(search_query)
+        if all_symbols is None:
+            all_symbols = []
+    except Exception as e:
+        print(f"Error fetching symbols: {e}")
+        all_symbols = []
+
+    return render_template(
+        'index.html',
+        symbols=all_symbols,
+        search_query=search_query,
+    )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
