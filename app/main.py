@@ -1,4 +1,4 @@
-from flask import Flask, Response, render_template, request, send_from_directory, abort, jsonify
+from flask import Flask, Response, render_template, request, send_from_directory, abort, jsonify, url_for
 from urllib.parse import unquote
 from datetime import datetime
 import os
@@ -549,12 +549,11 @@ def get_symbols(search_query=None):
                     'file_size': get_file_size(file_path),
                     'file_path': file_path,
                     'modified_time': modified_time,
-                    'download_url': f'/downloads/{file}',
+                    'download_url': file,
                 })
 
     symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['symbol']))
 
-    return symbols
 
 @app.route('/symbols-info')
 def check_file_sizes():
@@ -577,6 +576,13 @@ def file_list():
     file_urls = [f'/downloads/{file}' for file in files]
     return render_template('file_list.html', file_urls=file_urls)
 
+# Fallback download
+# @app.route('/downloads/<path:filename>')
+# def download_file(filename):
+#     storage_dir = os.path.join(os.path.dirname(__file__), 'storage')
+#     return send_from_directory(storage_dir, filename, as_attachment=True)
+
+
 @app.route('/', methods=['GET'])
 def index():
     search_query = request.args.get('search', '')
@@ -584,6 +590,10 @@ def index():
         all_symbols = get_symbols(search_query)
         if all_symbols is None:
             all_symbols = []
+            for symbol in all_symbols:
+                symbol['download_url'] = url_for('download_file',
+                    filename=symbol['filename'], _external=True)
+
     except Exception as e:
         print(f"Error fetching symbols: {e}")
         all_symbols = []
@@ -593,11 +603,6 @@ def index():
         symbols=all_symbols,
         search_query=search_query,
     )
-
-@app.route('/downloads/<path:filename>')
-def download_file(filename):
-    storage_dir = os.path.join(os.path.dirname(__file__), 'storage')
-    return send_from_directory(storage_dir, filename, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
