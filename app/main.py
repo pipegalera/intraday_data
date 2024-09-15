@@ -548,7 +548,8 @@ def get_symbols(search_query=None):
                     'minutes_ago': int(minutes_ago),
                     'file_size': get_file_size(file_path),
                     'file_path': file_path,
-                    'modified_time': modified_time
+                    'modified_time': modified_time,
+                    'download_url': f'/downloads/{file}',
                 })
 
     symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['symbol']))
@@ -592,6 +593,11 @@ def index():
         symbols=all_symbols,
         search_query=search_query,
     )
+
+@app.route('/downloads/<path:filename>')
+def download_file(filename):
+    storage_dir = os.path.join(os.path.dirname(__file__), 'storage')
+    return send_from_directory(storage_dir, filename, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
