@@ -7,6 +7,7 @@ COPY ./requirements.txt /app/
 COPY ./app/templates /app/templates
 COPY ./app/static /app/static
 COPY ./src /app/src
+COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
