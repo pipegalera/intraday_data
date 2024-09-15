@@ -15,6 +15,5 @@ VOLUME /app/storage
 
 EXPOSE 8080
 ENV FLASK_APP=app.py
-
 # Run the application
-CMD ["gunicorn", "--chdir", "/app", "-b", "0.0.0.0:8080", "main:app"]
+CMD nginx && gunicorn --chdir /app -b 127.0.0.1:5000 main:app
