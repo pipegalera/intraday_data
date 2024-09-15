@@ -8,7 +8,6 @@ COPY ./app/templates /app/templates
 COPY ./app/static /app/static
 COPY ./src /app/src
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY start.sh /start.sh
 
 RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
@@ -19,4 +18,5 @@ ENV FLASK_APP=app.py
 
 
 # Run the application
+COPY start.sh /start.sh
 CMD ["/start.sh"]
