@@ -12,7 +12,7 @@ import time
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
-DATA_PATH = os.getenv("DATA_PATH")
+DATA_PATH_APP = "/app/storage"
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute)
 start_date = datetime.now(timezone('US/Eastern')) - timedelta(hours=1.5)
@@ -540,9 +540,9 @@ def save_updated_stock_data(df):
 
     if df.empty:
         # If df is empty, update modification time of all CSV files to now
-        for file in os.listdir(DATA_PATH):
+        for file in os.listdir(DATA_PATH_APP):
             if file.endswith('.csv') or file.endswith('.CSV'):
-                os.utime(os.path.join(DATA_PATH, file), None)
+                os.utime(os.path.join(DATA_PATH_APP, file), None)
         print("No new data. Updated modification time of all CSV files.")
     else:
         # Update each symbol CSV file
@@ -553,7 +553,7 @@ def save_updated_stock_data(df):
                        WITH combined_data AS (
                            SELECT * FROM df WHERE symbol = '{symbol}'
                            UNION
-                           SELECT * FROM '{DATA_PATH}/{symbol}.csv'
+                           SELECT * FROM '{DATA_PATH_APP}/{symbol}.csv'
                            ORDER BY timestamp
                        )
                        SELECT * FROM combined_data
@@ -561,13 +561,13 @@ def save_updated_stock_data(df):
             # Write over every CSV file
             duckdb.query(f'''
                     COPY ({combined_data})
-                    TO '{DATA_PATH}/{symbol}.csv'
+                    TO '{DATA_PATH_APP}/{symbol}.csv'
                     (FORMAT 'CSV', HEADER)
                 ''')
 
         # Update the consolidated CSV file
         consolidated_file_name = '503 S&P Symbols'
-        file_to_delete = f'{DATA_PATH}/{consolidated_file_name}.CSV'
+        file_to_delete = f'{DATA_PATH_APP}/{consolidated_file_name}.CSV'
 
         # Check if the file exists and delete it
         if os.path.exists(file_to_delete):
@@ -576,29 +576,29 @@ def save_updated_stock_data(df):
         else:
             print(f"File does not exist: {file_to_delete}")
 
-        csv_files = [f for f in os.listdir(DATA_PATH) if f.endswith('.csv')]
-        csv_filepaths = ','.join([f"'{DATA_PATH}/{f}'" for f in csv_files])
+        csv_files = [f for f in os.listdir(DATA_PATH_APP) if f.endswith('.csv')]
+        csv_filepaths = ','.join([f"'{DATA_PATH_APP}/{f}'" for f in csv_files])
 
         print(f"Updating the consolidated CSV file with all the data...")
         duckdb.query(f"""
         COPY (
             SELECT * FROM read_csv_auto([{csv_filepaths}])
-        ) TO '{DATA_PATH}/temp_{consolidated_file_name}.CSV'
+        ) TO '{DATA_PATH_APP}/temp_{consolidated_file_name}.CSV'
         WITH (FORMAT 'CSV', HEADER)
         """)
 
-        os.rename(f'{DATA_PATH}/temp_{consolidated_file_name}.CSV', f'{DATA_PATH}/{consolidated_file_name}.CSV')
+        os.rename(f'{DATA_PATH_APP}/temp_{consolidated_file_name}.CSV', f'{DATA_PATH_APP}/{consolidated_file_name}.CSV')
 
     end_time = time.time()
     execution_time = round(end_time - start_time, 2)
 
     print(f"--> Execution time: {execution_time} seconds")
-    print(f"--> Data path: {DATA_PATH}")
+    print(f"--> Data path: {DATA_PATH_APP}")
     print(f"--> Timeframe added: {start_date} - Latest available")
 
 def main():
     all_spy_symbols = sorted(list(symbols_names.keys()), reverse=True)
-    current_spy_symbols = [f.split('.')[0] for f in os.listdir(DATA_PATH) if f.split('.')[0] in all_spy_symbols]
+    current_spy_symbols = [f.split('.')[0] for f in os.listdir(DATA_PATH_APP) if f.split('.')[0] in all_spy_symbols]
     df = get_updated_stock_data(current_spy_symbols)
     save_updated_stock_data(df)
 
