@@ -3,16 +3,12 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 COPY ./app/main.py /app/
-COPY ./app/requirements.txt /app/
+COPY ./requirements.txt /app/
 COPY ./app/templates /app/templates
 COPY ./app/static /app/static
 COPY ./src /app/src
 
-COPY  $HOME/.venvs/venv /app/venv
-
-ENV PATH="/app/venv/bin:$PATH"
-
-RUN pip install -r /app/requirements.txt
+RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
 VOLUME /app/storage
 

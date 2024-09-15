@@ -1,3 +1,5 @@
+flask
+gunicorn
 pandas
 python-dotenv
 alpaca-py
