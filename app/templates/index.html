@@ -110,16 +110,9 @@
                     <div class="text-gray-600 text-sm mr-4">
                         {{ symbol.file_size }}
                     </div>
-                    <a
-                        href="{{ '/downloads/' + symbol.download_url if symbol.file_available else '#' }}"
-                        class="{% if symbol.file_available %}bg-blue-500 hover:bg-blue-600{% else %}bg-gray-400 cursor-not-allowed{% endif %} text-white text-sm font-medium py-2 px-4 rounded-lg"
-                        {% if not symbol.file_available %}onclick="return false;"{% endif %}
-                    >
-                        {% if symbol.file_available %}
-                            Download
-                        {% else %}
-                            File getting updated
-                        {% endif %}
+                    <a href="{{ '/downloads/' + symbol.download_url }}"
+                       class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg">
+                        Download
                     </a>
                 </div>
                 {% endfor %}
@@ -127,10 +120,8 @@
 
             {% if symbols|length > 10 %}
             <div id="extend-button" class="text-center mt-4">
-                <button
-                    id="showAllButton"
-                    class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium py-2 px-4 rounded-lg"
-                >
+                <button id="showAllButton"
+                        class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium py-2 px-4 rounded-lg">
                     Show All
                 </button>
             </div>
@@ -151,21 +142,15 @@
                     <div class="text-gray-600 text-sm mr-4">
                         {{ symbol.file_size }}
                     </div>
-                    <a
-                        href="{{ '/downloads/' + symbol.download_url if symbol.file_available else '#' }}"
-                        class="{% if symbol.file_available %}bg-blue-500 hover:bg-blue-600{% else %}bg-gray-400 cursor-not-allowed{% endif %} text-white text-sm font-medium py-2 px-4 rounded-lg"
-                        {% if not symbol.file_available %}onclick="return false;"{% endif %}
-                    >
-                        {% if symbol.file_available %}
-                            Download
-                        {% else %}
-                            File getting updated
-                        {% endif %}
+                    <a href="{{ '/downloads/' + symbol.download_url }}"
+                       class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-lg">
+                        Download
                     </a>
                 </div>
                 {% endfor %}
             </div>
             {% endif %}
+
         <button
             id="backToTop"
             class="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-2 shadow-lg opacity-0 transition-opacity duration-300 hover:bg-blue-600"
