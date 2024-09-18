@@ -1,6 +1,6 @@
 from flask import Flask, Response, render_template, request, send_from_directory, abort, jsonify, url_for
 from urllib.parse import unquote
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import re
 
@@ -511,6 +511,10 @@ symbols_names = {'MMM': '3M',
 
 app = Flask(__name__, static_folder='static')
 
+def get_next_hour():
+    now = datetime.now()
+    next_hour = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+    return (next_hour - now).total_seconds()
 
 def get_file_size(file_path):
     size_bytes = os.path.getsize(file_path)
@@ -599,10 +603,13 @@ def index():
         print(f"Error fetching symbols: {e}")
         all_symbols = []
 
+    seconds_to_next_hour = get_next_hour()
+
     return render_template(
         'index.html',
         symbols=all_symbols,
         search_query=search_query,
+        seconds_to_next_hour=int(seconds_to_next_hour)
     )
 
 if __name__ == '__main__':

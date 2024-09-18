@@ -48,8 +48,8 @@
                     <a
                         href="https://github.com/pipegalera/intraday_data"
                         class="underline underline-offset-3 decoration-blue-400 dark:decoration-blue-600"
-                        >open source.</a
-                    >
+                        >open source </a
+                    >. Next update in: <span id="timer"></span>
                 </p>
             </header>
 
@@ -199,5 +199,8 @@
             </div>
         </footer>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <span id="seconds-to-next-hour" style="display: none"
+            >{{ seconds_to_next_hour }}</span
+        >
     </body>
 </html>
