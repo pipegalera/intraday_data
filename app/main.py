@@ -525,6 +525,9 @@ def get_file_size(file_path):
         size_mb = round(size_bytes / (1024 * 1024), 2)
         return f"{size_mb} MB"
 
+def file_exists(file_path):
+    return os.path.exists(file_path)
+
 def get_symbols(search_query=None):
     data_dir = os.path.join(os.path.dirname(__file__), 'storage')
     files = [f for f in os.listdir(data_dir) if
@@ -554,6 +557,7 @@ def get_symbols(search_query=None):
                     'file_path': file_path,
                     'modified_time': modified_time,
                     'download_url': file,
+                    'file_available': file_exists(file_path),
                 })
 
     symbols.sort(key=lambda x: (len(x['symbol']) <= 5, x['symbol']))
