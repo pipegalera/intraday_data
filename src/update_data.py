@@ -18,6 +18,7 @@ timeframe=TimeFrame(1, TimeFrameUnit.Minute)
 start_date = datetime.now(timezone('US/Eastern')) - timedelta(hours=1.5)
 
 symbols_names = {'MMM': '3M',
+
  'AOS': 'A. O. Smith',
  'ABT': 'Abbott Laboratories',
  'ABBV': 'AbbVie',
@@ -538,33 +539,38 @@ def save_updated_stock_data(df):
     print(f"Updating the CSV files with the new data...")
     start_time = time.time()
 
-    if df.empty:
-        # If df is empty, update modification time of all CSV files to now
-        for file in os.listdir(DATA_PATH_APP):
-            if file.endswith('.csv') or file.endswith('.CSV'):
-                os.utime(os.path.join(DATA_PATH_APP, file), None)
-        print("No new data. Updated modification time of all CSV files.")
-    else:
-        # Update each symbol CSV file
-        symbols = df.reset_index()["symbol"].unique()
-        for symbol in symbols:
-            print(f"Updating: {symbol}...")
-            combined_data = (f'''
-                       WITH combined_data AS (
-                           SELECT * FROM df WHERE symbol = '{symbol}'
-                           UNION
-                           SELECT * FROM '{DATA_PATH_APP}/{symbol}.csv'
-                           ORDER BY timestamp
-                       )
-                       SELECT * FROM combined_data
-                   ''')
-            # Write over every CSV file
-            duckdb.query(f'''
-                    COPY ({combined_data})
-                    TO '{DATA_PATH_APP}/{symbol}.csv'
-                    (FORMAT 'CSV', HEADER)
-                ''')
+    all_symbols = list(symbols_names.keys())
+    need_to_update_symbols = df.reset_index()["symbol"].unique()
+    no_need_to_update_symbols =[symbol for symbol in all_symbols if symbol not in need_to_update_symbols]
 
+    # CSV files that do not need to be updated since no new data to be included
+    # Modified date changed so the update time get reflected for the user
+    for file in os.listdir(DATA_PATH_APP):
+        if file.endswith('.csv') or file.endswith('.CSV'):
+            symbol = file.split('.')[0]
+            if symbol in no_need_to_update_symbols:
+                os.utime(os.path.join(DATA_PATH_APP, file), None)
+
+    # CSV files that need to be updated
+    for symbol in need_to_update_symbols:
+        print(f"Updating: {symbol}...")
+        combined_data = (f'''
+                    WITH combined_data AS (
+                        SELECT * FROM df WHERE symbol = '{symbol}'
+                        UNION
+                        SELECT * FROM '{DATA_PATH_APP}/{symbol}.csv'
+                        ORDER BY timestamp
+                    )
+                    SELECT * FROM combined_data
+                ''')
+        # Write over every CSV file
+        duckdb.query(f'''
+                COPY ({combined_data})
+                TO '{DATA_PATH_APP}/{symbol}.csv'
+                (FORMAT 'CSV', HEADER)
+            ''')
+
+    if len(need_to_update_symbols) > 0:
         # Update the consolidated CSV file
         consolidated_file_name = '503 S&P Symbols'
         file_to_delete = f'{DATA_PATH_APP}/{consolidated_file_name}.CSV'
