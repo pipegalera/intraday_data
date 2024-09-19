@@ -1,5 +1,4 @@
 from flask import Flask, Response, render_template, request, send_from_directory, abort, jsonify, url_for
-from flask_googleanalytics import GoogleAnalytics
 from urllib.parse import unquote
 from datetime import datetime, timedelta
 import os
@@ -511,7 +510,6 @@ symbols_names = {'MMM': '3M',
  '503 S&P Symbols': 'All data',}
 
 app = Flask(__name__, static_folder='static')
-ga = GoogleAnalytics(app, 'GA_MEASUREMENT_ID')
 
 def get_next_hour():
     now = datetime.now()
