@@ -6,3 +6,4 @@ alpaca-py
 pytz
 duckdb
 lxml
+GoogleAnalytics

@@ -14,7 +14,16 @@
             href="{{ url_for('static', filename='images/favicon.ico') }}"
         />
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <style>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id }}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '{{ ga_id }}');
+                </script>
+                <style>
             body {
                 font-family: "Work Sans", "Noto Sans", sans-serif;
             }

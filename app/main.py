@@ -1,4 +1,5 @@
 from flask import Flask, Response, render_template, request, send_from_directory, abort, jsonify, url_for
+from flask_googleanalytics import GoogleAnalytics
 from urllib.parse import unquote
 from datetime import datetime, timedelta
 import os
@@ -510,6 +511,7 @@ symbols_names = {'MMM': '3M',
  '503 S&P Symbols': 'All data',}
 
 app = Flask(__name__, static_folder='static')
+ga = GoogleAnalytics(app, 'GA_MEASUREMENT_ID')
 
 def get_next_hour():
     now = datetime.now()
@@ -609,11 +611,15 @@ def index():
 
     seconds_to_next_hour = get_next_hour()
 
+    # Return Google Analytics
+    ga_id = os.getenv("GA_MEASUREMENT_ID")
+
     return render_template(
         'index.html',
         symbols=all_symbols,
         search_query=search_query,
-        seconds_to_next_hour=int(seconds_to_next_hour)
+        seconds_to_next_hour=int(seconds_to_next_hour),
+        ga_id=ga_id,
     )
 
 if __name__ == '__main__':
