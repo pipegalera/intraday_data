@@ -612,14 +612,14 @@ def index():
     seconds_to_next_hour = get_next_hour()
 
     # Return Google Analytics
-    ga_id = os.getenv("GA_MEASUREMENT_ID")
+    GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID")
 
     return render_template(
         'index.html',
         symbols=all_symbols,
         search_query=search_query,
         seconds_to_next_hour=int(seconds_to_next_hour),
-        ga_id=ga_id,
+        ga_id=GA_MEASUREMENT_ID,
     )
 
 if __name__ == '__main__':
