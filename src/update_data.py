@@ -12,10 +12,13 @@ import time
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
-DATA_PATH_APP = "/app/storage"
+DATA_PATH_APP = os.getenv("DATA_PATH_APP")
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute)
-start_date = datetime.now(timezone('US/Eastern')) - timedelta(hours=1.5)
+delta = timedelta(hours=1.2)
+start_date = datetime.now(timezone('US/Eastern')) - delta
+
+print("Time delta:", delta)
 
 symbols_names = {'MMM': '3M',
 
@@ -540,11 +543,12 @@ def save_updated_stock_data(df):
     start_time = time.time()
 
     all_symbols = list(symbols_names.keys())
-    need_to_update_symbols = df.reset_index()["symbol"].unique()
+    need_to_update_symbols = df.reset_index()["symbol"].unique() if len(df) > 0 else []
     no_need_to_update_symbols =[symbol for symbol in all_symbols if symbol not in need_to_update_symbols]
 
     # CSV files that do not need to be updated since no new data to be included
     # Modified date changed so the update time get reflected for the user
+
     for file in os.listdir(DATA_PATH_APP):
         if file.endswith('.csv') or file.endswith('.CSV'):
             symbol = file.split('.')[0]
@@ -573,19 +577,12 @@ def save_updated_stock_data(df):
     if len(need_to_update_symbols) > 0:
         # Update the consolidated CSV file
         consolidated_file_name = '503 S&P Symbols'
-        file_to_delete = f'{DATA_PATH_APP}/{consolidated_file_name}.CSV'
-
-        # Check if the file exists and delete it
-        if os.path.exists(file_to_delete):
-            os.remove(file_to_delete)
-            print(f"Deleted existing file: {file_to_delete}")
-        else:
-            print(f"File does not exist: {file_to_delete}")
 
         csv_files = [f for f in os.listdir(DATA_PATH_APP) if f.endswith('.csv')]
         csv_filepaths = ','.join([f"'{DATA_PATH_APP}/{f}'" for f in csv_files])
 
         print(f"Updating the consolidated CSV file with all the data...")
+        duckdb.sql("SET threads TO 6")
         duckdb.query(f"""
         COPY (
             SELECT * FROM read_csv_auto([{csv_filepaths}])
