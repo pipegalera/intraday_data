@@ -5,6 +5,4 @@ __pycache__
 *.parquet
 *.csv
 *.CSV
-google_service_account.json
-restos/**
 *.tmp
