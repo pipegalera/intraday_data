@@ -22,6 +22,7 @@ VOLUME /app/storage
 
 EXPOSE 8080
 
+RUN mkdir -p /app/storage && chown -R www-data:www-data /app/storage
 RUN echo '#!/bin/bash\nnginx\ngunicorn --chdir /app -b 127.0.0.1:5000 main:app' > /start.sh && \
     chmod +x /start.sh
 
