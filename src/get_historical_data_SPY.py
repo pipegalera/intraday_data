@@ -1,10 +1,8 @@
 import pandas as pd
 import duckdb
-from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from pytz import timezone
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 from alpaca.data.requests import StockBarsRequest
@@ -30,7 +28,8 @@ def get_stock_data(symbols,
     request_parameters = StockBarsRequest(
                     symbol_or_symbols=symbols,
                     timeframe=timeframe,
-                    start=pd.to_datetime(start_date).tz_localize('America/New_York')                    )
+                    start=pd.to_datetime(start_date).tz_localize('America/New_York'),
+                    adjustment = "all",)
 
     # Fetch data and convert to dataframe
     print(f"Getting Alpaca Markets 1Min intraday data for {symbols} ...")

@@ -21,7 +21,6 @@ start_date = datetime.now(timezone('US/Eastern')) - delta
 print("Time delta:", delta)
 
 symbols_names = {'MMM': '3M',
-
  'AOS': 'A. O. Smith',
  'ABT': 'Abbott Laboratories',
  'ABBV': 'AbbVie',
@@ -531,7 +530,8 @@ def get_updated_stock_data(symbols):
     request_parameters = StockBarsRequest(
                     symbol_or_symbols=symbols,
                     timeframe=timeframe,
-                    start=pd.to_datetime(start_date).tz_convert('America/New_York'),
+                    start=pd.to_datetime(start_date).tz_convert('America/New_York'),\
+                    adjustment = "all",
                     )
     df = data_client.get_stock_bars(request_parameters).df.reset_index()
 
