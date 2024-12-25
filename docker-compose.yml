@@ -5,6 +5,7 @@ services:
       - "8080:8080"
     volumes:
       - /data/coolify/applications/zckks0c4o80k8oo4kc8c800o/storage:/app/storage
+      - /data/coolify/applications/zckks0c4o80k8oo4kc8c800o/src:/app/src
     restart: always
     command: sh -c "nginx && gunicorn --chdir /app -b 127.0.0.1:5000 main:app"
     user: www-data
