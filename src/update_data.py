@@ -12,7 +12,7 @@ import time
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
-DATA_PATH = "/app/storage"
+DATA_PATH = os.getenv("DATA_PATH_APP")
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute)
 delta = timedelta(hours=1.2)
@@ -577,7 +577,7 @@ def save_updated_stock_data(df):
         csv_files = [f for f in os.listdir(DATA_PATH) if f.endswith('.csv')]
         csv_filepaths = ','.join([f"'{DATA_PATH}/{f}'" for f in csv_files])
 
-        duckdb.sql("SET threads TO 6")
+        duckdb.sql("SET threads TO 4")
         duckdb.query(f"""
         COPY (
             SELECT * FROM read_csv_auto([{csv_filepaths}])
@@ -589,6 +589,7 @@ def save_updated_stock_data(df):
 
     else:
         print(f"No new data to be added")
+        # Touch the file if no need to update
         for file in os.listdir(DATA_PATH):
             if file.endswith('.csv') or file.endswith('.CSV'):
                 symbol = file.split('.')[0]
