@@ -12,7 +12,7 @@ import time
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
-DATA_PATH = os.getenv("DATA_PATH_APP")
+DATA_PATH = "/app/storage/"
 
 timeframe=TimeFrame(1, TimeFrameUnit.Minute)
 delta = timedelta(hours=1.2)
