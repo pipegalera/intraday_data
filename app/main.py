@@ -507,7 +507,9 @@ symbols_names = {'MMM': '3M',
  'ZBRA': 'Zebra Technologies',
  'ZBH': 'Zimmer Biomet',
  'ZTS': 'Zoetis',
- '503 S&P Symbols': 'All data',}
+ 'WDAY': 'Workday Inc',
+ 'APO': 'Apollo Global Management',
+ 'LII': 'Lennox International'}
 
 app = Flask(__name__, static_folder='static')
 
