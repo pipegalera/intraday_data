@@ -9,16 +9,11 @@ from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 from alpaca.data.requests import StockBarsRequest
 import duckdb
 import time
+import argparse
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
 DATA_PATH = "/app/storage/"
-
-timeframe=TimeFrame(1, TimeFrameUnit.Minute)
-delta = timedelta(hours=1.2)
-start_date = datetime.now(timezone('US/Eastern')) - delta
-
-print("Time delta:", delta)
 
 symbols_names = {'MMM': '3M',
  'AOS': 'A. O. Smith',
@@ -527,12 +522,19 @@ symbols_names = {'MMM': '3M',
  'APO': 'Apollo Global Management',
  'LII': 'Lennox International'}
 
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Update stock data with configurable time delta')
+    parser.add_argument('--time_delta', type=float, default=1.2,
+                      help='Time delta in hours (default: 1.2)')
+    return parser.parse_args()
+
 def get_updated_stock_data(symbols):
     data_client = StockHistoricalDataClient(ALPACA_KEY, ALPACA_SECRET)
     print(f"Getting the symbols from Alpaca Markets...")
     request_parameters = StockBarsRequest(
                     symbol_or_symbols=symbols,
-                    timeframe=timeframe,
+                    timeframe=TimeFrame(1, TimeFrameUnit.Minute),
                     start=pd.to_datetime(start_date).tz_convert('America/New_York'),\
                     adjustment = "all",
                     )
@@ -605,9 +607,17 @@ def save_updated_stock_data(df):
 
     print(f"--> Execution time: {execution_time} seconds")
     print(f"--> Data path: {DATA_PATH}")
-    print(f"--> Timeframe added: {start_date} - Latest available")
+    print(f"--> Dates added: {start_date} - Latest available")
 
 def main():
+
+    args = parse_arguments()
+    delta = timedelta(hours=args.time_delta)
+    global start_date
+    start_date = datetime.now(timezone('US/Eastern')) - delta
+
+    print("Time delta:", delta)
+
     all_spy_symbols = sorted(list(symbols_names.keys()), reverse=True)
     current_spy_symbols = [f.split('.')[0] for f in os.listdir(DATA_PATH) if f.split('.')[0] in all_spy_symbols]
     print(current_spy_symbols)
