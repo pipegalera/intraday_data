@@ -549,9 +549,8 @@ def save_updated_stock_data(df):
     need_to_update_symbols = df.reset_index()["symbol"].unique() if len(df) > 0 else []
     no_need_to_update_symbols =[symbol for symbol in all_symbols if symbol not in need_to_update_symbols]
 
-    print(f"Alpaca didn't found new data for {len(no_need_to_update_symbols)} symbols")
-
     if len(need_to_update_symbols) > 0:
+        print(f"Alpaca found new data for {len(need_to_update_symbols)} symbols")
         # Updating CSV files that need to be updated
         for symbol in need_to_update_symbols:
             print(f"Updating: {symbol}...")
@@ -571,6 +570,7 @@ def save_updated_stock_data(df):
                     (FORMAT 'CSV', HEADER)
                 ''')
         # Touching CSV files that DO NOT need to be updated
+        print(f"Alpaca didn't found new data for {len(no_need_to_update_symbols)} symbols")
         for symbol in no_need_to_update_symbols:
             print(f"Updating: {symbol}...")
             os.utime(os.path.join(DATA_PATH, f"{symbol}.csv"), None)
