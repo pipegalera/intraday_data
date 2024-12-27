@@ -522,7 +522,10 @@ symbols_names = {'MMM': '3M',
  'YUM': 'Yum! Brands',
  'ZBRA': 'Zebra Technologies',
  'ZBH': 'Zimmer Biomet',
- 'ZTS': 'Zoetis',}
+ 'ZTS': 'Zoetis',
+ 'WDAY': 'Workday Inc',
+ 'APO': 'Apollo Global Management',
+ 'LII': 'Lennox International'}
 
 def get_updated_stock_data(symbols):
     data_client = StockHistoricalDataClient(ALPACA_KEY, ALPACA_SECRET)
