@@ -549,11 +549,10 @@ def save_updated_stock_data(df):
     need_to_update_symbols = df.reset_index()["symbol"].unique() if len(df) > 0 else []
     no_need_to_update_symbols =[symbol for symbol in all_symbols if symbol not in need_to_update_symbols]
 
-    print(f"No need to update {len(no_need_to_update_symbols)} symbols")
+    print(f"Alpaca didn't found new data for {len(no_need_to_update_symbols)} symbols")
 
-
-    # CSV files that need to be updated
     if len(need_to_update_symbols) > 0:
+        # Updating CSV files that need to be updated
         for symbol in need_to_update_symbols:
             print(f"Updating: {symbol}...")
             combined_data = (f'''
@@ -571,6 +570,10 @@ def save_updated_stock_data(df):
                     TO '{DATA_PATH}/{symbol}.csv'
                     (FORMAT 'CSV', HEADER)
                 ''')
+        # Touching CSV files that DO NOT need to be updated
+        for symbol in no_need_to_update_symbols:
+            print(f"Updating: {symbol}...")
+            os.utime(os.path.join(DATA_PATH, f"{symbol}.csv"), None)
 
         # Update the consolidated CSV file
         print(f"Updating the consolidated CSV file with all the data...")
@@ -591,15 +594,10 @@ def save_updated_stock_data(df):
 
     else:
         print(f"No new data to be added")
-        # Touch the file if no need to update
+        # Touch the files if no need to update
         for file in os.listdir(DATA_PATH):
             if file.endswith('.csv') or file.endswith('.CSV'):
-                symbol = file.split('.')[0]
-                if symbol in no_need_to_update_symbols:
                     os.utime(os.path.join(DATA_PATH, file), None)
-
-        consolidated_file_name = next(f for f in os.listdir(DATA_PATH) if f.endswith('.CSV'))
-        os.utime(os.path.join(DATA_PATH, consolidated_file_name), None)
 
 
     end_time = time.time()
