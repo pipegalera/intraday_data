@@ -8,9 +8,9 @@ Updates & New features:
 
 ## What
 
-[EasyFinData.com](https://EasyFinData.com) automatically collects 1Min intraday data of the S&P500 from `2016-01-01` until current date and serves them in convenient CSV files.
+[EasyFinData.com](https://EasyFinData.com) automatically collects 1Min intraday data of the S&P500 from `2016-01-01` until current date and serves them in convenient CSV files. Its a very accessible gateway for intraday data for non-coders.
 
-Its a very accessible gateway for intraday data for non-coders.
+The data is updated every hour.
 
 ## Why
 
