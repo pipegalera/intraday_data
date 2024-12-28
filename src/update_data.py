@@ -2,7 +2,6 @@ import pandas as pd
 import os
 from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
-load_dotenv()
 from pytz import timezone
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
@@ -11,10 +10,11 @@ import duckdb
 import time
 import argparse
 
+load_dotenv()
+
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
-DATA_PATH = "/app/storage/"
-#DATA_PATH = os.getenv("DATA_PATH")
+DATA_PATH = os.getenv("DATA_PATH")
 
 
 def parse_arguments():
