@@ -65,7 +65,8 @@ def main():
     add_updated_symbols(current_symbols, updated_symbols, start_date)
 
     # Save updated symbols dictionary to file
-    with open("./sp500_symbols.json", "w") as f:
+    parent_dir = os.path.dirname(DATA_PATH)
+    with open(os.path.join(parent_dir, "sp500_symbols.json"), "w") as f:
         json.dump(updated_dict_symbols, f)
 
 if __name__ == "__main__":
