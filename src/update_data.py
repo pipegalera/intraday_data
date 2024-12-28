@@ -14,7 +14,7 @@ load_dotenv()
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
-DATA_PATH = os.getenv("DATA_PATH")
+DATA_PATH = os.getenv("DATA_PATH_APP")
 
 
 def parse_arguments():

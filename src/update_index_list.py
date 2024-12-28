@@ -10,7 +10,7 @@ load_dotenv()
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
-DATA_PATH = os.getenv("DATA_PATH")
+DATA_PATH = os.getenv("DATA_PATH_APP")
 
 def get_symbols_SPY():
     url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
