@@ -73,7 +73,6 @@ def save_updated_stock_data(df, symbols):
         for symbol in no_need_to_update_symbols:
             print(f"Touching: {symbol}...")
             filename = f"{symbol}.csv"
-            print(filename)
             try:
                 file_path = os.path.join(DATA_PATH, filename)
                 os.utime(file_path, None)
