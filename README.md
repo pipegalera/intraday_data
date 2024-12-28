@@ -2,6 +2,10 @@
 
 ⚠️ DISCLAIMER ⚠️: This project is for educational and hobbyist purposes. If you are a company, please use production-ready financial API data services such as [IQFeed](https://www.iqfeed.net/), [PolygonIO](https://polygon.io/), or [Alpaca Markets](https://alpaca.markets/).
 
+Updates & New features:
+
+- `2024/28/12`: Every Sunday at 00:30 UTC the app automatically updates the list of constituents of S&P500 and updates the data with all the new tickers data up to date (e.g. last run removed `AMTM` and `CTLT`, added `WDAY` and `APO`).
+
 ## What
 
 [EasyFinData.com](https://EasyFinData.com) automatically collects 1Min intraday data of the S&P500 from `2016-01-01` until current date and serves them in convenient CSV files.
