@@ -1,11 +1,12 @@
 import pandas as pd
 import duckdb
 from dotenv import load_dotenv
-load_dotenv()
 import os
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 from alpaca.data.requests import StockBarsRequest
+
+load_dotenv()
 
 ALPACA_KEY = os.getenv("ALPACA_KEY")
 ALPACA_SECRET = os.getenv("ALPACA_SECRET")
@@ -16,8 +17,8 @@ start_date="2016-01-01" # Alpaca markets API doesn't go further in time
 
 def get_symbols_SPY():
     url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
-    df = pd.read_html(url)[0]
-    return dict(zip(df["Symbol"], df["Security"]))
+    df = pd.read_html(url)[0].sort_values(by="Symbol")
+    return dict(zip(df["Symbol"], df["Security"])), list(df["Symbol"])
 
 def get_stock_data(symbols,
                  timeframe=timeframe,
@@ -45,7 +46,7 @@ def save_stock_data(df):
 
 def main():
     # Get all S&P500 symbols
-    symbols_SPY = sorted(get_symbols_SPY().keys())
+    _, symbols_SPY = get_symbols_SPY()
 
     # Check what symbols are already downloaded
     current_symbols = []
