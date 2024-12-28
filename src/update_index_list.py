@@ -1,4 +1,5 @@
 import os
+import json
 from dotenv import load_dotenv
 import pandas as pd
 from alpaca.data.historical import StockHistoricalDataClient
@@ -57,11 +58,15 @@ def add_updated_symbols(current_symbols: list,
 
 def main():
     start_date = "2024-01-01"
-    _ , updated_symbols = get_symbols_SPY()
+    updated_dict_symbols , updated_symbols = get_symbols_SPY()
     current_symbols = [f.removesuffix('.csv') for f in os.listdir(DATA_PATH) if f.endswith('.csv')]
 
     delete_oudated_symbols(current_symbols, updated_symbols)
     add_updated_symbols(current_symbols, updated_symbols, start_date)
+
+    # Save updated symbols dictionary to file
+    with open("app/sp500_symbols.json", "w") as f:
+        json.dump(updated_dict_symbols, f)
 
 if __name__ == "__main__":
     main()
