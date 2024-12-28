@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY ./app/main.py /app/
-COPY ./app/sp500_symbols.json /app/
+COPY ./sp500_symbols.json /app/
 COPY ./requirements.txt /app/
 COPY ./app/templates /app/templates
 COPY ./app/static /app/static

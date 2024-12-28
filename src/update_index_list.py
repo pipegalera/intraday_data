@@ -65,7 +65,7 @@ def main():
     add_updated_symbols(current_symbols, updated_symbols, start_date)
 
     # Save updated symbols dictionary to file
-    with open("app/sp500_symbols.json", "w") as f:
+    with open("./sp500_symbols.json", "w") as f:
         json.dump(updated_dict_symbols, f)
 
 if __name__ == "__main__":
