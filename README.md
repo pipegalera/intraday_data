@@ -1,6 +1,9 @@
+> **Warning**
+> Deprecated. I stopped paying for the DNS. 
+
 ![EasyFinData.com](images/cover.png)
 
-⚠️ DISCLAIMER ⚠️: This project is for educational and hobbyist purposes. If you are a company, please use production-ready financial API data services such as [IQFeed](https://www.iqfeed.net/), [PolygonIO](https://polygon.io/), or [Alpaca Markets](https://alpaca.markets/).
+DISCLAIMER: This project is for educational and hobbyist purposes. If you are a company, please use production-ready financial API data services such as [IQFeed](https://www.iqfeed.net/), [PolygonIO](https://polygon.io/), or [Alpaca Markets](https://alpaca.markets/).
 
 Updates & New features:
 
